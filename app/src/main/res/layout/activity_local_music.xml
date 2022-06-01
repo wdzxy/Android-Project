@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LocalMusicActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.MusicPlayer.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.MusicPlayer.PopupOverlay"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetEnd="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="30sp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="50dp"
+                    android:gravity="center|left"
+                    android:text="@string/title_activity_local_music"/>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.xuexiang.xui.widget.tabbar.EasyIndicator
+        android:id="@+id/local_music_easyIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:indicator_bottom_line_color="#000000"
+        app:indicator_height="60dp"
+        app:indicator_line_color="#03DAC5"
+        app:indicator_line_show="true"
+        app:indicator_normal_color="#9C9C9C"
+        app:indicator_select_textSize="16sp"
+        app:indicator_selected_color="#03DAC5"
+        app:indicator_textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/local_music_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_layout"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/xui_btn_blue_normal_color"
+            android:id="@+id/bottom_layout">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/xui_btn_blue_select_color"/>
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/local_music"
+                android:layout_centerVertical="true"
+                android:background="@color/white"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/local_music_bottom_iv_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/local_music_bottom_tv_song"
+                android:text="song_name"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/local_music_bottom_iv_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/local_music_bottom_tv_singer"
+                android:text="singer"
+                android:textSize="12sp"
+                android:layout_below="@+id/local_music_bottom_tv_song"
+                android:layout_alignLeft="@+id/local_music_bottom_tv_song"
+                android:layout_marginTop="10dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/local_music_bottom_iv_next"
+                android:layout_centerVertical="true"
+                android:src="@drawable/xui_ic_navigation_next_white"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/local_music_bottom_iv_play"
+                android:layout_centerVertical="true"
+                android:src="@drawable/local_music"
+                android:layout_toLeftOf="@+id/local_music_bottom_iv_next"
+                android:layout_marginRight="20dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/local_music_bottom_iv_last"
+                android:layout_centerVertical="true"
+                android:src="@drawable/xui_ic_navigation_back_white"
+                android:layout_toLeftOf="@+id/local_music_bottom_iv_play"
+                android:layout_marginRight="20dp"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
