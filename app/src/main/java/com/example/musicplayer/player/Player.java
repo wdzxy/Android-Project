@@ -66,6 +66,9 @@ public class Player {
      * 开始播放
      */
     public static void start(SingleSongBean bean){
+        if (bean == null){
+            return;
+        }
         currentSong = bean;
         setPath(bean.getPath());
         if (mediaPlayer != null && !status){
