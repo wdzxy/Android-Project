@@ -1,5 +1,7 @@
 package com.example.bean;
 
+import java.util.Objects;
+
 public class SingleSongBean {
 
     private String id;//歌曲id
@@ -61,5 +63,22 @@ public class SingleSongBean {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SingleSongBean that = (SingleSongBean) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(song, that.song) &&
+                Objects.equals(singer, that.singer) &&
+                Objects.equals(duration, that.duration) &&
+                Objects.equals(path, that.path);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, song, singer, duration, path);
     }
 }

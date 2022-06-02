@@ -22,14 +22,18 @@ public class Player {
 
     private static String musicPath = "";
 
-    //底部播放器属性
-    private static String song = "";
-
-    private static String singer = "";
-
-    private static boolean playing = false;//表示当前播放器是否处于播放状态 true:正在播放 false:当前未播放或暂停
+    private static boolean playing = false;//表示当前播放器是否处于播放状态 true:正在播放 false:当前暂停
 
     private static Context context;
+
+    //当前播放位置
+    private static int current = -1;
+
+    //播放列表
+    private static List<SingleSongBean> list;
+
+    //当前播放的
+    private static SingleSongBean currentSong;
 
     //记录需要更新的控件
     private static List<TextView> songTvList = new ArrayList<>(3);//初始长度根据activity个数确定
@@ -42,24 +46,56 @@ public class Player {
         Player.context = context;
     }
 
+    public static List<SingleSongBean> getList() {
+        return list;
+    }
+
+    public static void setList(List<SingleSongBean> list) {
+        Player.list = list;
+    }
+
     /**
      * 设置播放的音乐的路径
      * @param path
      */
-    public static void setPath(String path){
+    private static void setPath(String path){
         musicPath = path;
     }
 
     /**
      * 开始播放
      */
-    public static void start(){
+    public static void start(SingleSongBean bean){
+        currentSong = bean;
+        setPath(bean.getPath());
         if (mediaPlayer != null && !status){
-            update();
-           mediaPlayer.reset();
-           mediaPlayer = MediaPlayer.create(context,Uri.parse(musicPath));
-           mediaPlayer.start();
+            mediaPlayer = MediaPlayer.create(context,Uri.parse(musicPath));
+            mediaPlayer.start();
+            status = true;
+        }else{
+            mediaPlayer.seekTo(current);
+            mediaPlayer.start();
         }
+        playing = true;
+        update();
+    }
+
+    public static void play(){
+        if (mediaPlayer.isPlaying()){
+            pause();
+        }else {
+            start(currentSong);
+        }
+    }
+
+    /**
+     * 暂停
+     */
+    public static void pause(){
+        mediaPlayer.pause();
+        current = mediaPlayer.getCurrentPosition();
+        playing = false;
+        update();
     }
 
     /**
@@ -74,6 +110,37 @@ public class Player {
                 mediaPlayer.release();
             }
             playing = false;
+            status = false;
+        }
+    }
+
+    /**
+     * 播放上一首，存在上一首时返回true，没有上一首时返回false
+     */
+    public static boolean playLast(){
+        int index = list.indexOf(currentSong);
+        if (index == 0){
+            return false;
+        }else {
+            currentSong = list.get(index-1);
+            stop();
+            start(currentSong);
+            return true;
+        }
+    }
+
+    /**
+     * 播放下一首
+     */
+    public static boolean playNext(){
+        int index = list.indexOf(currentSong);
+        if (index == list.size()-1){
+            return false;
+        }else {
+            currentSong = list.get(index+1);
+            stop();
+            start(currentSong);
+            return true;
         }
     }
 
@@ -87,6 +154,13 @@ public class Player {
         songTvList.add(songTV);
         singerTvList.add(singerTV);
         playIvList.add(playIV);
+        String song = "";
+        String singer = "";
+
+        if (currentSong != null) {
+            song = currentSong.getSong();
+            singer = currentSong.getSinger();
+        }
 
         if (!song.equals("")) {
             songTV.setText(song);
@@ -94,7 +168,7 @@ public class Player {
         if (!singer.equals("")) {
             singerTV.setText(singer);
         }
-        playIV.setImageResource(playing ? R.drawable.local_music : R.drawable.local_music);//需要将图标替换,true:播放中 false:未播放或暂停
+        playIV.setImageResource(playing ? R.drawable.pause : R.drawable.play);//需要将图标替换,true:播放中 false:未播放或暂停
     }
 
     public static void removeView(TextView songTV,TextView singerTV,ImageView playIV){
@@ -109,27 +183,11 @@ public class Player {
     private static void update(){
         if (songTvList.size() == singerTvList.size() && songTvList.size() == playIvList.size()){
             for (int i = 0; i < songTvList.size(); i++) {
-                songTvList.get(i).setText(song);
-                singerTvList.get(i).setText(singer);
-                playIvList.get(i).setImageResource(playing ? R.drawable.local_music : R.drawable.local_music);//需要将图标替换,true:播放中 false:未播放或暂停
+                songTvList.get(i).setText(currentSong.getSong());
+                singerTvList.get(i).setText(currentSong.getSinger());
+                playIvList.get(i).setImageResource(playing ? R.drawable.pause : R.drawable.play);//需要将图标替换,true:播放中 false:未播放或暂停
             }
         }
-    }
-
-    public static String getSong() {
-        return song;
-    }
-
-    public static void setSong(String song) {
-        Player.song = song;
-    }
-
-    public static String getSinger() {
-        return singer;
-    }
-
-    public static void setSinger(String singer) {
-        Player.singer = singer;
     }
 
     public static boolean isPlaying() {

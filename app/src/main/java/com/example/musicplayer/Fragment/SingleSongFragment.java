@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bean.SingleSongBean;
+import com.example.listener.BtnListener;
 import com.example.musicplayer.R;
 import com.example.musicplayer.adapter.SingleSongAdapter;
 import com.example.musicplayer.player.Player;
@@ -100,6 +101,10 @@ public class SingleSongFragment extends Fragment {
         singerTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_song);
 
+        playIV.setOnClickListener(new BtnListener());
+        nextIV.setOnClickListener(new BtnListener());
+        lastIV.setOnClickListener(new BtnListener());
+
     }
 
     /**
@@ -114,15 +119,10 @@ public class SingleSongFragment extends Fragment {
                 //设置底部歌曲和歌手名
                 singerTV.setText(singleSongBean.getSinger());
                 songTV.setText(singleSongBean.getSong());
-                //更新播放器中的数据
-                Player.setSong(singleSongBean.getSong());
-                Player.setSinger(singleSongBean.getSinger());
                 //停止上一首
                 stopMusic();
-                //设置新的音乐的路径
-                Player.setPath(singleSongBean.getPath());
                 //播放
-                playMusic();
+                playMusic(singleSongBean);
             }
         });
     }
@@ -130,9 +130,9 @@ public class SingleSongFragment extends Fragment {
     /**
      * 播放音乐
      */
-    private void playMusic() {
-        Player.start();
-        playIV.setImageResource(R.drawable.xui_ic_navigation_next_white);//应替换为暂停图标
+    private void playMusic(SingleSongBean bean) {
+        Player.start(bean);
+        playIV.setImageResource(R.drawable.pause);//应替换为暂停图标
     }
 
     /**
@@ -141,7 +141,7 @@ public class SingleSongFragment extends Fragment {
     private void stopMusic() {
         Player.stop();
         //修改播放按钮
-        playIV.setImageResource(R.drawable.local_music);//此处应使用播放图标，需要替换
+        playIV.setImageResource(R.drawable.play);//此处应使用播放图标，需要替换
     }
 
     /**
@@ -186,6 +186,8 @@ public class SingleSongFragment extends Fragment {
             );
             list.add(singleSongBean);
         }
+        //将播放列表添加到播放器的列表中
+        Player.setList(list);
         //提示adapter更新
         adapter.notifyDataSetChanged();
     }

@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         Player.setContext(this);
         Player.addView(songTV,singerTV,playIV);
+
     }
 
     @Override
