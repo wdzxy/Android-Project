@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.listener.BtnListener;
 import com.example.musicplayer.Fragment.MusicLibFragment;
 import com.example.musicplayer.Fragment.MyMusicFragment;
 import com.example.musicplayer.player.Player;
@@ -72,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
 
         Player.setContext(this);
         Player.addView(songTV,singerTV,playIV);
+
+        BtnListener btnListener = new BtnListener();
+        nextIV.setOnClickListener(btnListener);
+        playIV.setOnClickListener(btnListener);
+        lastIV.setOnClickListener(btnListener);
 
     }
 

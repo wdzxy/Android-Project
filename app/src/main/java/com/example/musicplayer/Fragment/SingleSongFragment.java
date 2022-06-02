@@ -101,9 +101,10 @@ public class SingleSongFragment extends Fragment {
         singerTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_song);
 
-        playIV.setOnClickListener(new BtnListener());
-        nextIV.setOnClickListener(new BtnListener());
-        lastIV.setOnClickListener(new BtnListener());
+        BtnListener btnListener = new BtnListener();
+        playIV.setOnClickListener(btnListener);
+        nextIV.setOnClickListener(btnListener);
+        lastIV.setOnClickListener(btnListener);
 
     }
 
