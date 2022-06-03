@@ -7,18 +7,24 @@ import com.example.musicplayer.player.Player;
 
 public class BtnListener implements View.OnClickListener {
 
+    private Player player;
+
+    public BtnListener(Player player){
+        this.player = player;
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
             case R.id.local_music_bottom_iv_play:
-                Player.play();
+                player.play();
                 break;
             case R.id.local_music_bottom_iv_next:
-                boolean bn = Player.playNext();
+                boolean bn = player.playNext();
                 break;
             case R.id.local_music_bottom_iv_last:
-                boolean bl = Player.playLast();
+                boolean bl = player.playLast();
                 break;
         }
     }

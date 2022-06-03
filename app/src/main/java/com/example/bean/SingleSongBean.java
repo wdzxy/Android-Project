@@ -14,15 +14,18 @@ public class SingleSongBean {
 
     private String path;//存储位置
 
+    private String album;//专辑名
+
     public SingleSongBean() {
     }
 
-    public SingleSongBean(String id, String song, String singer, String duration, String path) {
+    public SingleSongBean(String id, String song, String singer, String duration, String path, String album) {
         this.id = id;
         this.song = song;
         this.singer = singer;
         this.duration = duration;
         this.path = path;
+        this.album = album;
     }
 
     public String getId() {
@@ -63,6 +66,14 @@ public class SingleSongBean {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
     @Override

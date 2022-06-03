@@ -28,6 +28,8 @@ public class LocalMusicActivity extends AppCompatActivity {
 
     private List<Fragment> fragments;
 
+    private Player player;
+
     //底部播放器
     private ImageView nextIV,playIV,lastIV;
 
@@ -66,7 +68,8 @@ public class LocalMusicActivity extends AppCompatActivity {
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
 
-        Player.addView(songTV,singerTV,playIV);
+        player = Player.getPlayer(this);
+        player.addView(songTV,singerTV,playIV);
     }
 
     class LocalMusciFragmentAdapter extends FragmentPagerAdapter{

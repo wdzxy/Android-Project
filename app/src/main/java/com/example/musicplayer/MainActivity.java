@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Fragment> fragments;
 
+    private Player player;
+
     private MyFragmentPageAdapter adapter;
 
     //底部播放器
@@ -71,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
 
-        Player.setContext(this);
-        Player.addView(songTV,singerTV,playIV);
+        player = Player.getPlayer(this);
+        player.addView(songTV,singerTV,playIV);
 
-        BtnListener btnListener = new BtnListener();
+        BtnListener btnListener = new BtnListener(player);
         nextIV.setOnClickListener(btnListener);
         playIV.setOnClickListener(btnListener);
         lastIV.setOnClickListener(btnListener);
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        Player.stop();
+        player.stop();
     }
 
     class MyFragmentPageAdapter extends FragmentPagerAdapter{

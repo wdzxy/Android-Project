@@ -36,6 +36,8 @@ import java.util.List;
  */
 public class SingleSongFragment extends Fragment {
 
+    private Player player;
+
     private View root;
 
     private RecyclerView musicRV;
@@ -79,7 +81,8 @@ public class SingleSongFragment extends Fragment {
         if (root == null) {
             root = getActivity().getLayoutInflater().inflate(R.layout.fragment_single_song, null);
         }
-        list = new ArrayList<>();
+        player = Player.getPlayer(getActivity());
+        list = player.getSingleSongList();
 
         //获取RecyclerView
         musicRV = (RecyclerView) root.findViewById(R.id.single_song);
@@ -91,7 +94,6 @@ public class SingleSongFragment extends Fragment {
         //设置布局管理器，垂直，不反转
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         musicRV.setLayoutManager(linearLayoutManager);
-        loadLocalMusic();
 
         //底部播放器
         nextIV = (ImageView) getActivity().findViewById(R.id.local_music_bottom_iv_next);
@@ -101,7 +103,7 @@ public class SingleSongFragment extends Fragment {
         singerTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_song);
 
-        BtnListener btnListener = new BtnListener();
+        BtnListener btnListener = new BtnListener(player);
         playIV.setOnClickListener(btnListener);
         nextIV.setOnClickListener(btnListener);
         lastIV.setOnClickListener(btnListener);
@@ -132,7 +134,7 @@ public class SingleSongFragment extends Fragment {
      * 播放音乐
      */
     private void playMusic(SingleSongBean bean) {
-        Player.start(bean);
+        player.start(bean);
         playIV.setImageResource(R.drawable.pause);//应替换为暂停图标
     }
 
@@ -140,57 +142,9 @@ public class SingleSongFragment extends Fragment {
      * 停止正在播放的音乐
      */
     private void stopMusic() {
-        Player.stop();
+        player.stop();
         //修改播放按钮
         playIV.setImageResource(R.drawable.play);//此处应使用播放图标，需要替换
-    }
-
-    /**
-     * 加载本地存储中的音乐
-     */
-    private void loadLocalMusic(){
-        //获取ContentResolver
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        //获取本地音乐存储的地址
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {
-                MediaStore.Audio.Media._ID,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.DISPLAY_NAME,
-                MediaStore.Audio.Media.ALBUM_ID,
-                MediaStore.Audio.Media.DURATION
-        };
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-        //查询地址
-        Cursor cursor = contentResolver.query(uri, projection, selection, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-        //遍历cursor
-        int id = 0;
-        while (cursor.moveToNext()){
-            String song = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-            String singer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-            id++;
-            String sid = String.valueOf(id);
-            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-            long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
-            String time = simpleDateFormat.format(new Date(duration));
-
-            //将一行数据封装到对象中
-            SingleSongBean singleSongBean = new SingleSongBean(
-                    sid,
-                    song,
-                    singer,
-                    time,
-                    path
-            );
-            list.add(singleSongBean);
-        }
-        //将播放列表添加到播放器的列表中
-        Player.setList(list);
-        //提示adapter更新
-        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.bean.AlbumBean;
 import com.example.bean.MainSongSheetBean;
 import com.example.musicplayer.R;
 import com.example.musicplayer.adapter.MainSongSheetAdapter;
+import com.example.musicplayer.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ import java.util.List;
 public class MyMusicFragment extends Fragment {
 
     private View root;
+
+    private Player player;
 
     private Button localMusic;
 
@@ -59,20 +63,14 @@ public class MyMusicFragment extends Fragment {
             root = getActivity().getLayoutInflater().inflate(R.layout.fragment_my_music, null);
         }
 
-        //主页歌单
-        List<MainSongSheetBean> mainSongSheetBeans = new ArrayList<>();
-        //测试歌单
-        for (int i = 0; i < 5; i++) {
-            MainSongSheetBean mainSongSheetBean = new MainSongSheetBean();
-            mainSongSheetBean.setCount(2*i);
-            mainSongSheetBean.setName("SongSheet " + i);
-            mainSongSheetBeans.add(mainSongSheetBean);
-        }
+        //主页专辑
+        player = Player.getPlayer(getContext());
+        List<AlbumBean> albumList = player.getAlbumList();
 
         RecyclerView mainSongSheet = (RecyclerView)root.findViewById(R.id.main_song_sheet);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mainSongSheet.setLayoutManager(linearLayoutManager);
-        mainSongSheet.setAdapter(new MainSongSheetAdapter(mainSongSheetBeans,getActivity()));
+        mainSongSheet.setAdapter(new MainSongSheetAdapter(albumList,getActivity()));
 
         localMusic = (Button) root.findViewById(R.id.local_music);
         localMusic.setOnClickListener(new View.OnClickListener() {

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bean.AlbumBean;
 import com.example.bean.MainSongSheetBean;
 import com.example.musicplayer.R;
 
@@ -16,10 +17,10 @@ import java.util.List;
 
 public class MainSongSheetAdapter extends RecyclerView.Adapter<MainSongSheetAdapter.MainSongSheetViewHolder> {
 
-    private List<MainSongSheetBean> list;
+    private List<AlbumBean> list;
     private Context context;
 
-    public MainSongSheetAdapter(List<MainSongSheetBean> list, Context context) {
+    public MainSongSheetAdapter(List<AlbumBean> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -37,12 +38,12 @@ public class MainSongSheetAdapter extends RecyclerView.Adapter<MainSongSheetAdap
     public void onBindViewHolder(@NonNull MainSongSheetViewHolder holder, int position) {
 
         //将list中的数据绑定到view中
-        MainSongSheetBean mainSongSheetBean = list.get(position);
+        AlbumBean albumBean = list.get(position);
 //        if (holder.imageView.getDrawable() == null) {
 //            holder.imageView.setImageURI(Uri.fromFile(new File(mainSongSheetItem.getDrawAble())));
 //        }
-        holder.nameView.setText(mainSongSheetBean.getName());
-        holder.countView.setText(String.valueOf(mainSongSheetBean.getCount())+"首");
+        holder.nameView.setText(albumBean.getAlbumName());
+        holder.countView.setText(String.valueOf(albumBean.getCount())+"首");
     }
 
     @Override

@@ -1,71 +1,162 @@
 package com.example.musicplayer.player;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bean.AlbumBean;
 import com.example.bean.SingleSongBean;
 import com.example.musicplayer.R;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Player {
 
-    private static MediaPlayer mediaPlayer  =new MediaPlayer();
+    private static Player player;
 
-    private static boolean status = false;//表示当前是否有正在播放或暂停的音乐 true:有 false:无
+    private MediaPlayer mediaPlayer;
 
-    private static String musicPath = "";
+    private boolean status = false;//表示当前是否有正在播放或暂停的音乐 true:有 false:无
 
-    private static boolean playing = false;//表示当前播放器是否处于播放状态 true:正在播放 false:当前暂停
+    private String musicPath = "";
 
-    private static Context context;
+    private boolean playing = false;//表示当前播放器是否处于播放状态 true:正在播放 false:当前暂停
+
+    private Context context;
 
     //当前播放位置
-    private static int current = -1;
+    private int current = -1;
 
     //播放列表
-    private static List<SingleSongBean> list;
+    private List<SingleSongBean> list;
+    
+    //本地专辑列表
+    private Map<String ,List<SingleSongBean>> albumMap;
 
     //当前播放的
-    private static SingleSongBean currentSong;
+    private SingleSongBean currentSong;
 
     //记录需要更新的控件
-    private static List<TextView> songTvList = new ArrayList<>(3);//初始长度根据activity个数确定
+    private List<TextView> songTvList;
 
-    private static List<TextView> singerTvList = new ArrayList<>(3);
+    private List<TextView> singerTvList;
 
-    private static List<ImageView> playIvList = new ArrayList<>(3);
+    private List<ImageView> playIvList;
 
-    public static void setContext(Context context) {
-        Player.context = context;
+    private Player(Context context){
+        this.context = context;
+        mediaPlayer = new MediaPlayer();
+        list = new ArrayList<>();
+        albumMap = new HashMap<>();
+        songTvList = new ArrayList<>(3);//初始长度根据activity个数确定
+        singerTvList = new ArrayList<>(3);
+        playIvList = new ArrayList<>(3);
+        loadData();
     }
 
-    public static List<SingleSongBean> getList() {
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public List<SingleSongBean> getSingleSongList() {
         return list;
     }
 
-    public static void setList(List<SingleSongBean> list) {
-        Player.list = list;
+    public void setList(List<SingleSongBean> list) {
+        this.list = list;
+    }
+
+    public List<AlbumBean> getAlbumList(){
+        ArrayList<AlbumBean> albumBeans = new ArrayList<>(albumMap.size());
+        //遍历专辑集合
+        Iterator<String> iterator = albumMap.keySet().iterator();
+        while (iterator.hasNext()){
+            String albumName = iterator.next();
+            int count = albumMap.get(albumName).size();
+            AlbumBean albumBean = new AlbumBean(
+                    albumName,
+                    count
+            );
+            albumBeans.add(albumBean);
+        }
+        return albumBeans;
+    }
+
+    /**
+     * 加载本地音乐，并根据专辑分组
+     */
+    public void loadData(){
+        //获取ContentResolver
+        ContentResolver contentResolver = context.getContentResolver();
+        //获取本地音乐存储的地址
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        //查询地址
+        Cursor cursor = contentResolver.query(uri, null, selection, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+        //遍历cursor
+        int id = 0;
+        while (cursor.moveToNext()){
+            String song = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+            String singer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+            id++;
+            String sid = String.valueOf(id);
+            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+            long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
+            String time = simpleDateFormat.format(new Date(duration));
+            String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+
+            //将一行数据封装到对象中
+            SingleSongBean singleSongBean = new SingleSongBean(
+                    sid,
+                    song,
+                    singer,
+                    time,
+                    path,
+                    album
+            );
+            list.add(singleSongBean);
+
+            //判断此单曲的专辑是否已经在map中
+            if (albumMap.containsKey(album)) {
+                //已经创建过这个专辑，直接获取专辑并将单曲添加进去
+                List<SingleSongBean> singleSongBeans = albumMap.get(album);
+                singleSongBeans.add(singleSongBean);
+            }else {
+                //当前单曲的专辑没有创建过，创建新的专辑
+                ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>();
+                singleSongBeans.add(singleSongBean);
+                albumMap.put(album,singleSongBeans);
+            }
+        }
     }
 
     /**
      * 设置播放的音乐的路径
      * @param path
      */
-    private static void setPath(String path){
+    private void setPath(String path){
         musicPath = path;
     }
 
     /**
      * 开始播放
      */
-    public static void start(SingleSongBean bean){
+    public void start(SingleSongBean bean){
         if (bean == null){
             return;
         }
@@ -83,7 +174,10 @@ public class Player {
         update();
     }
 
-    public static void play(){
+    /**
+     * 用于底部播放器的播放按钮
+     */
+    public void play(){
         if (mediaPlayer.isPlaying()){
             pause();
         }else {
@@ -94,7 +188,7 @@ public class Player {
     /**
      * 暂停
      */
-    public static void pause(){
+    public void pause(){
         mediaPlayer.pause();
         current = mediaPlayer.getCurrentPosition();
         playing = false;
@@ -104,7 +198,7 @@ public class Player {
     /**
      * 停止当前的音乐
      */
-    public static void stop(){
+    public void stop(){
         if (mediaPlayer != null){
             if (status){
                 mediaPlayer.pause();//暂停
@@ -120,7 +214,7 @@ public class Player {
     /**
      * 播放上一首，存在上一首时返回true，没有上一首时返回false
      */
-    public static boolean playLast(){
+    public boolean playLast(){
         int index = list.indexOf(currentSong);
         if (index == 0){
             return false;
@@ -135,7 +229,7 @@ public class Player {
     /**
      * 播放下一首
      */
-    public static boolean playNext(){
+    public boolean playNext(){
         int index = list.indexOf(currentSong);
         if (index == list.size()-1){
             return false;
@@ -153,7 +247,7 @@ public class Player {
      * @param singerTV
      * @param playIV
      */
-    public static void addView(TextView songTV,TextView singerTV,ImageView playIV){
+    public void addView(TextView songTV,TextView singerTV,ImageView playIV){
         songTvList.add(songTV);
         singerTvList.add(singerTV);
         playIvList.add(playIV);
@@ -174,7 +268,7 @@ public class Player {
         playIV.setImageResource(playing ? R.drawable.pause : R.drawable.play);//需要将图标替换,true:播放中 false:未播放或暂停
     }
 
-    public static void removeView(TextView songTV,TextView singerTV,ImageView playIV){
+    public void removeView(TextView songTV,TextView singerTV,ImageView playIV){
         songTvList.remove(songTV);
         singerTvList.remove(singerTV);
         playIvList.remove(playIV);
@@ -183,7 +277,7 @@ public class Player {
     /**
      * 当播放的歌曲发生变化时，调用此方法更新注册的控件
      */
-    private static void update(){
+    private void update(){
         if (songTvList.size() == singerTvList.size() && songTvList.size() == playIvList.size()){
             for (int i = 0; i < songTvList.size(); i++) {
                 songTvList.get(i).setText(currentSong.getSong());
@@ -193,11 +287,22 @@ public class Player {
         }
     }
 
-    public static boolean isPlaying() {
+    public boolean isPlaying() {
         return playing;
     }
 
-    public static void setPlaying(boolean playing) {
-        Player.playing = playing;
+    public void setPlaying(boolean playing) {
+        this.playing = playing;
+    }
+
+    public static Player getPlayer(Context context){
+        if (player == null){
+            synchronized (Player.class){
+                if (player == null){
+                    player = new Player(context);
+                }
+            }
+        }
+        return player;
     }
 }
