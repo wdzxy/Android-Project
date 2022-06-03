@@ -10,32 +10,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bean.AlbumBean;
-import com.example.bean.MainSongSheetBean;
 import com.example.musicplayer.R;
 
 import java.util.List;
 
-public class MainSongSheetAdapter extends RecyclerView.Adapter<MainSongSheetAdapter.MainSongSheetViewHolder> {
+public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHolder> {
 
     private List<AlbumBean> list;
     private Context context;
 
-    public MainSongSheetAdapter(List<AlbumBean> list, Context context) {
+    public AlbumAdapter(List<AlbumBean> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public MainSongSheetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AlbumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         //读取item的layout文件
         View view = View.inflate(context, R.layout.recyclerview_main_song_sheet_item, null);
-        return new MainSongSheetViewHolder(view);
+        return new AlbumViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MainSongSheetViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
 
         //将list中的数据绑定到view中
         AlbumBean albumBean = list.get(position);
@@ -51,7 +50,7 @@ public class MainSongSheetAdapter extends RecyclerView.Adapter<MainSongSheetAdap
         return list == null ? 0 : list.size();
     }
 
-    class MainSongSheetViewHolder extends RecyclerView.ViewHolder{
+    class AlbumViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView imageView;
 
@@ -59,7 +58,7 @@ public class MainSongSheetAdapter extends RecyclerView.Adapter<MainSongSheetAdap
 
         public TextView countView;
 
-        public MainSongSheetViewHolder(@NonNull View itemView) {
+        public AlbumViewHolder(@NonNull View itemView) {
             super(itemView);
             //TODO
             //findViewById

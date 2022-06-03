@@ -2,7 +2,12 @@ package com.example.musicplayer;
 
 import android.os.Bundle;
 
+import com.example.bean.PathBean;
+import com.example.musicplayer.Fragment.AlbumFragment;
+import com.example.musicplayer.Fragment.PathFragment;
+import com.example.musicplayer.Fragment.SingerFragment;
 import com.example.musicplayer.Fragment.SingleSongFragment;
+import com.example.musicplayer.adapter.PathAdapter;
 import com.example.musicplayer.player.Player;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -50,6 +55,15 @@ public class LocalMusicActivity extends AppCompatActivity {
 
         SingleSongFragment singleSongFragment = new SingleSongFragment();
         fragments.add(singleSongFragment);
+
+        AlbumFragment albumFragment = new AlbumFragment();
+        fragments.add(albumFragment);
+
+        SingerFragment singerFragment = new SingerFragment();
+        fragments.add(singerFragment);
+
+        PathFragment pathFragment = new PathFragment();
+        fragments.add(pathFragment);
 
         EasyIndicator localMusicEasyIndicator = (EasyIndicator) findViewById(R.id.local_music_easyIndicator);
         localMusicEasyIndicator.setTabTitles(tabs);

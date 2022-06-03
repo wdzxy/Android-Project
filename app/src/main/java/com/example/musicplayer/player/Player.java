@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bean.AlbumBean;
+import com.example.bean.PathBean;
+import com.example.bean.SingerBean;
 import com.example.bean.SingleSongBean;
 import com.example.musicplayer.R;
 
@@ -47,6 +49,12 @@ public class Player {
     //本地专辑列表
     private Map<String ,List<SingleSongBean>> albumMap;
 
+    //按歌手分组
+    private Map<String,List<SingleSongBean>> singerMap;
+
+    //按目录分组
+    private Map<String,List<SingleSongBean>> pathMap;
+
     //当前播放的
     private SingleSongBean currentSong;
 
@@ -62,6 +70,8 @@ public class Player {
         mediaPlayer = new MediaPlayer();
         list = new ArrayList<>();
         albumMap = new HashMap<>();
+        singerMap = new HashMap<>();
+        pathMap = new HashMap<>();
         songTvList = new ArrayList<>(3);//初始长度根据activity个数确定
         singerTvList = new ArrayList<>(3);
         playIvList = new ArrayList<>(3);
@@ -80,6 +90,10 @@ public class Player {
         this.list = list;
     }
 
+    /**
+     * 整合专辑信息
+     * @return
+     */
     public List<AlbumBean> getAlbumList(){
         ArrayList<AlbumBean> albumBeans = new ArrayList<>(albumMap.size());
         //遍历专辑集合
@@ -97,7 +111,41 @@ public class Player {
     }
 
     /**
-     * 加载本地音乐，并根据专辑分组
+     * 整合歌手信息
+     * @return
+     */
+    public List<SingerBean> getSingerList(){
+        ArrayList<SingerBean> singerBeans = new ArrayList<>();
+        Iterator<String> iterator = singerMap.keySet().iterator();
+        while (iterator.hasNext()){
+            String singer = iterator.next();
+            int count = singerMap.get(singer).size();
+            SingerBean singerBean = new SingerBean(
+                    singer,
+                    count
+            );
+            singerBeans.add(singerBean);
+        }
+        return singerBeans;
+    }
+
+    public List<PathBean> getPathList(){
+        ArrayList<PathBean> pathBeans = new ArrayList<>();
+        Iterator<String> iterator = pathMap.keySet().iterator();
+        while (iterator.hasNext()){
+            String path = iterator.next();
+            int count = pathMap.get(path).size();
+            PathBean pathBean = new PathBean(
+                    path,
+                    count
+            );
+            pathBeans.add(pathBean);
+        }
+        return pathBeans;
+    }
+
+    /**
+     * 加载本地音乐，并根据专辑、歌手、文件夹分组
      */
     public void loadData(){
         //获取ContentResolver
@@ -131,7 +179,7 @@ public class Player {
             );
             list.add(singleSongBean);
 
-            //判断此单曲的专辑是否已经在map中
+            //按专辑分组
             if (albumMap.containsKey(album)) {
                 //已经创建过这个专辑，直接获取专辑并将单曲添加进去
                 List<SingleSongBean> singleSongBeans = albumMap.get(album);
@@ -141,6 +189,32 @@ public class Player {
                 ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>();
                 singleSongBeans.add(singleSongBean);
                 albumMap.put(album,singleSongBeans);
+            }
+
+            //按歌手分组
+            if (singerMap.containsKey(singer)){
+                List<SingleSongBean> singleSongBeans = singerMap.get(singer);
+                singleSongBeans.add(singleSongBean);
+            }else {
+                ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>();
+                singleSongBeans.add(singleSongBean);
+                singerMap.put(singer,singleSongBeans);
+            }
+
+            //按文件夹分组
+            //去掉path中的歌名
+            String[] split = path.split("\\/");
+            String pathWithoutSongName = "";
+            for (int i=0;i<split.length-1;i++) {
+                pathWithoutSongName += split[i]+"/";
+            }
+            if (pathMap.containsKey(pathWithoutSongName)){
+                List<SingleSongBean> singleSongBeans = pathMap.get(pathWithoutSongName);
+                singleSongBeans.add(singleSongBean);
+            }else {
+                ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>();
+                singleSongBeans.add(singleSongBean);
+                pathMap.put(pathWithoutSongName,singleSongBeans);
             }
         }
     }
