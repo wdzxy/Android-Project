@@ -31,11 +31,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textSize="30sp"
-                    android:layout_weight="1"
                     android:layout_marginLeft="50dp"
+                    android:layout_weight="1"
                     android:gravity="center|left"
-                    android:text="@string/title_activity_local_music"/>
+                    android:text="@string/title_activity_local_music"
+                    android:textSize="30sp" />
 
             </LinearLayout>
 
@@ -110,30 +110,30 @@
                 android:layout_alignLeft="@+id/local_music_bottom_tv_song"
                 android:layout_marginTop="10dp"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/local_music_bottom_iv_next"
                 android:layout_centerVertical="true"
-                android:src="@drawable/xui_ic_navigation_next_white"
+                android:background="@drawable/ic_next"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/local_music_bottom_iv_play"
                 android:layout_centerVertical="true"
-                android:src="@drawable/local_music"
+                android:background="@drawable/ic_play"
                 android:layout_toLeftOf="@+id/local_music_bottom_iv_next"
                 android:layout_marginRight="20dp"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/local_music_bottom_iv_last"
                 android:layout_centerVertical="true"
-                android:src="@drawable/xui_ic_navigation_back_white"
+                android:background="@drawable/ic_prev"
                 android:layout_toLeftOf="@+id/local_music_bottom_iv_play"
                 android:layout_marginRight="20dp"/>
 

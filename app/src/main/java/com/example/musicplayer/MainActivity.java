@@ -9,12 +9,17 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.listener.BtnListener;
+import com.example.listener.BtnTypes;
 import com.example.musicplayer.Fragment.MusicLibFragment;
 import com.example.musicplayer.Fragment.MyMusicFragment;
 import com.example.musicplayer.player.Player;
@@ -32,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private MyFragmentPageAdapter adapter;
 
     //底部播放器
-    private ImageView nextIV,playIV,lastIV;
+    private Button nextIV,playIV,lastIV;
 
     private TextView songTV,singerTV;
 
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         //需要在程序中动态获取存储的读写权限，否则不部分系统中无法打开音乐文件
         ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO},
                 1);
 
 
@@ -66,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
         easyIndicator.setViewPager(viewPager,adapter);
 
         //底部播放器
-        nextIV = (ImageView) findViewById(R.id.local_music_bottom_iv_next);
-        playIV = (ImageView) findViewById(R.id.local_music_bottom_iv_play);
-        lastIV = (ImageView) findViewById(R.id.local_music_bottom_iv_last);
+        nextIV = (Button) findViewById(R.id.local_music_bottom_iv_next);
+        playIV = (Button) findViewById(R.id.local_music_bottom_iv_play);
+        lastIV = (Button) findViewById(R.id.local_music_bottom_iv_last);
 
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
@@ -76,11 +81,26 @@ public class MainActivity extends AppCompatActivity {
         player = Player.getPlayer(this);
         player.addView(songTV,singerTV,playIV);
 
-        BtnListener btnListener = new BtnListener(player);
-        nextIV.setOnClickListener(btnListener);
-        playIV.setOnClickListener(btnListener);
-        lastIV.setOnClickListener(btnListener);
+        BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
+        playIV.setOnClickListener(playBtnListener);
 
+        BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
+        nextIV.setOnClickListener(nextBtnListener);
+
+        BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
+        lastIV.setOnClickListener(lastBtnListener);
+
+        RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
+        bottomPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (player.getStatus()){
+                    String songName = songTV.getText().toString();
+                    startActivity(new Intent(getApplicationContext(),PlayerActivity.class)
+                            .putExtra("songName",songName));
+                }
+            }
+        });
     }
 
     @Override

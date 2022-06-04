@@ -1,5 +1,6 @@
 package com.example.musicplayer;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.bean.PathBean;
@@ -23,7 +24,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.view.FrameMetrics;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class LocalMusicActivity extends AppCompatActivity {
     private Player player;
 
     //底部播放器
-    private ImageView nextIV,playIV,lastIV;
+    private Button nextIV,playIV,lastIV;
 
     private TextView songTV,singerTV;
 
@@ -47,7 +50,7 @@ public class LocalMusicActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //设置tab
         String[] tabs = this.getResources().getStringArray(R.array.tab_local_music);
@@ -75,15 +78,27 @@ public class LocalMusicActivity extends AppCompatActivity {
         localMusicEasyIndicator.setViewPager(viewPager,localMusciFragmentAdapter);
 
         //底部播放器
-        nextIV = (ImageView) findViewById(R.id.local_music_bottom_iv_next);
-        playIV = (ImageView) findViewById(R.id.local_music_bottom_iv_play);
-        lastIV = (ImageView) findViewById(R.id.local_music_bottom_iv_last);
+        nextIV = (Button) findViewById(R.id.local_music_bottom_iv_next);
+        playIV = (Button) findViewById(R.id.local_music_bottom_iv_play);
+        lastIV = (Button) findViewById(R.id.local_music_bottom_iv_last);
 
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
 
         player = Player.getPlayer(this);
         player.addView(songTV,singerTV,playIV);
+
+        RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
+        bottomPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (player.getStatus()){
+                    String songName = songTV.getText().toString();
+                    startActivity(new Intent(getApplicationContext(),PlayerActivity.class)
+                            .putExtra("songName",songName));
+                }
+            }
+        });
     }
 
     class LocalMusciFragmentAdapter extends FragmentPagerAdapter{

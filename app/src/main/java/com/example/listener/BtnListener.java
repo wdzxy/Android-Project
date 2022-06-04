@@ -9,23 +9,36 @@ public class BtnListener implements View.OnClickListener {
 
     private Player player;
 
-    public BtnListener(Player player){
+    private int btnType;
+
+    public BtnListener(Player player,int btnType){
         this.player = player;
+        this.btnType = btnType;
     }
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-        switch (id){
-            case R.id.local_music_bottom_iv_play:
+        switch (btnType){
+            case BtnTypes.PLAY:
                 player.play();
                 break;
-            case R.id.local_music_bottom_iv_next:
+            case BtnTypes.NEXT:
                 boolean bn = player.playNext();
                 break;
-            case R.id.local_music_bottom_iv_last:
+            case BtnTypes.LAST:
                 boolean bl = player.playLast();
                 break;
+            case BtnTypes.FORWARD:
+                player.seekTo(player.getCurrent()+1000);
+                break;
+            case BtnTypes.REWARD:
+                int current = player.getCurrent();
+                if (current < 1000){
+                    current = 0;
+                }else {
+                    current -= 1000;
+                }
+                player.seekTo(current);
         }
     }
 }

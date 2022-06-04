@@ -14,11 +14,13 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bean.SingleSongBean;
 import com.example.listener.BtnListener;
+import com.example.listener.BtnTypes;
 import com.example.musicplayer.R;
 import com.example.musicplayer.adapter.SingleSongAdapter;
 import com.example.musicplayer.player.Player;
@@ -48,7 +50,7 @@ public class SingleSongFragment extends Fragment {
     private List<SingleSongBean> list;
 
     //底部播放器
-    private ImageView nextIV,playIV,lastIV;
+    private Button nextIV,playIV,lastIV;
 
     private TextView songTV,singerTV;
 
@@ -96,17 +98,21 @@ public class SingleSongFragment extends Fragment {
         musicRV.setLayoutManager(linearLayoutManager);
 
         //底部播放器
-        nextIV = (ImageView) getActivity().findViewById(R.id.local_music_bottom_iv_next);
-        playIV = (ImageView) getActivity().findViewById(R.id.local_music_bottom_iv_play);
-        lastIV = (ImageView) getActivity().findViewById(R.id.local_music_bottom_iv_last);
+        nextIV = (Button) getActivity().findViewById(R.id.local_music_bottom_iv_next);
+        playIV = (Button) getActivity().findViewById(R.id.local_music_bottom_iv_play);
+        lastIV = (Button) getActivity().findViewById(R.id.local_music_bottom_iv_last);
 
         singerTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_song);
 
-        BtnListener btnListener = new BtnListener(player);
-        playIV.setOnClickListener(btnListener);
-        nextIV.setOnClickListener(btnListener);
-        lastIV.setOnClickListener(btnListener);
+        BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
+        playIV.setOnClickListener(playBtnListener);
+
+        BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
+        nextIV.setOnClickListener(nextBtnListener);
+
+        BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
+        lastIV.setOnClickListener(lastBtnListener);
 
     }
 
@@ -135,7 +141,7 @@ public class SingleSongFragment extends Fragment {
      */
     private void playMusic(SingleSongBean bean) {
         player.start(bean);
-        playIV.setImageResource(R.drawable.pause);//应替换为暂停图标
+        playIV.setBackgroundResource(R.drawable.ic_pause);//应替换为暂停图标
     }
 
     /**
@@ -144,7 +150,7 @@ public class SingleSongFragment extends Fragment {
     private void stopMusic() {
         player.stop();
         //修改播放按钮
-        playIV.setImageResource(R.drawable.play);//此处应使用播放图标，需要替换
+        playIV.setBackgroundResource(R.drawable.ic_play);//此处应使用播放图标，需要替换
     }
 
     @Override

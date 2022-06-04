@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.example.bean.AlbumBean;
 import com.example.bean.PathBean;
 import com.example.bean.SingerBean;
 import com.example.bean.SingleSongBean;
+import com.example.listener.OnCompletionListener;
 import com.example.musicplayer.R;
 
 import java.io.IOException;
@@ -63,7 +65,9 @@ public class Player {
 
     private List<TextView> singerTvList;
 
-    private List<ImageView> playIvList;
+    private List<Button> playIvList;
+
+    private OnCompletionListener listener;
 
     private Player(Context context){
         this.context = context;
@@ -75,6 +79,7 @@ public class Player {
         songTvList = new ArrayList<>(3);//初始长度根据activity个数确定
         singerTvList = new ArrayList<>(3);
         playIvList = new ArrayList<>(3);
+        listener = new OnCompletionListener(this);
         loadData();
     }
 
@@ -238,14 +243,22 @@ public class Player {
         setPath(bean.getPath());
         if (mediaPlayer != null && !status){
             mediaPlayer = MediaPlayer.create(context,Uri.parse(musicPath));
+            mediaPlayer.setOnCompletionListener(listener);
             mediaPlayer.start();
             status = true;
         }else{
-            mediaPlayer.seekTo(current);
             mediaPlayer.start();
         }
         playing = true;
         update();
+    }
+
+    /**
+     * 从头开始播放
+     */
+    public void replay(){
+        mediaPlayer.seekTo(0);
+        mediaPlayer.start();
     }
 
     /**
@@ -279,10 +292,31 @@ public class Player {
                 mediaPlayer.seekTo(0);//进度条退回到0
                 mediaPlayer.stop();//停止
                 mediaPlayer.release();
+                update();
             }
             playing = false;
             status = false;
         }
+    }
+
+    public int getDuration(){
+        return mediaPlayer.getDuration();
+    }
+
+    public int getCurrent(){
+        current = mediaPlayer.getCurrentPosition();
+        return current;
+    }
+
+    public void seekTo(int position){
+        mediaPlayer.pause();
+        mediaPlayer.seekTo(position);
+        current = position;
+        mediaPlayer.start();
+    }
+
+    public int getAudioSessionId(){
+        return mediaPlayer.getAudioSessionId();
     }
 
     /**
@@ -321,7 +355,7 @@ public class Player {
      * @param singerTV
      * @param playIV
      */
-    public void addView(TextView songTV,TextView singerTV,ImageView playIV){
+    public void addView(TextView songTV,TextView singerTV,Button playIV){
         songTvList.add(songTV);
         singerTvList.add(singerTV);
         playIvList.add(playIV);
@@ -339,7 +373,42 @@ public class Player {
         if (!singer.equals("")) {
             singerTV.setText(singer);
         }
-        playIV.setImageResource(playing ? R.drawable.pause : R.drawable.play);//需要将图标替换,true:播放中 false:未播放或暂停
+
+        playIV.setBackgroundResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);//需要将图标替换,true:播放中 false:未播放或暂停
+    }
+
+    public void addSongTV(TextView view){
+        songTvList.add(view);
+
+        String song = "";
+
+        if (currentSong != null) {
+            song = currentSong.getSong();
+        }
+
+        if (!song.equals("")) {
+            view.setText(song);
+        }
+    }
+
+    public void addSingerTV(TextView view){
+        singerTvList.add(view);
+
+        String singer = "";
+
+        if (currentSong != null) {
+            singer = currentSong.getSong();
+        }
+
+        if (!singer.equals("")) {
+            view.setText(singer);
+        }
+    }
+
+    public void addPlayBtn(Button button){
+        playIvList.add(button);
+
+        button.setBackgroundResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);
     }
 
     public void removeView(TextView songTV,TextView singerTV,ImageView playIV){
@@ -351,12 +420,21 @@ public class Player {
     /**
      * 当播放的歌曲发生变化时，调用此方法更新注册的控件
      */
-    private void update(){
-        if (songTvList.size() == singerTvList.size() && songTvList.size() == playIvList.size()){
-            for (int i = 0; i < songTvList.size(); i++) {
+    public void update(){
+
+        int songs = songTvList.size();
+        int singers = singerTvList.size();
+        int plays = playIvList.size();
+
+        for (int i = 0; i < songs || i < singers || i < plays; i++) {
+            if (i < songs){
                 songTvList.get(i).setText(currentSong.getSong());
+            }
+            if (i < singers){
                 singerTvList.get(i).setText(currentSong.getSinger());
-                playIvList.get(i).setImageResource(playing ? R.drawable.pause : R.drawable.play);//需要将图标替换,true:播放中 false:未播放或暂停
+            }
+            if (i < plays){
+                playIvList.get(i).setBackgroundResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);//需要将图标替换,true:播放中 false:未播放或暂停
             }
         }
     }
@@ -378,5 +456,9 @@ public class Player {
             }
         }
         return player;
+    }
+
+    public boolean getStatus() {
+        return status;
     }
 }
