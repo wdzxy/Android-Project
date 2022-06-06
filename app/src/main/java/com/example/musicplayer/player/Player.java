@@ -37,7 +37,7 @@ public class Player {
 
     private boolean status = false;//表示当前是否有正在播放或暂停的音乐 true:有 false:无
 
-    private String musicPath = "";
+    private String musicPath = "";//当前播放的音乐的路径
 
     private boolean playing = false;//表示当前播放器是否处于播放状态 true:正在播放 false:当前暂停
 
