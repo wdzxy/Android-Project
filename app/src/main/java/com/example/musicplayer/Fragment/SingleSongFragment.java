@@ -105,14 +105,14 @@ public class SingleSongFragment extends Fragment {
         singerTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) getActivity().findViewById(R.id.local_music_bottom_tv_song);
 
-        BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
-        playIV.setOnClickListener(playBtnListener);
-
-        BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
-        nextIV.setOnClickListener(nextBtnListener);
-
-        BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
-        lastIV.setOnClickListener(lastBtnListener);
+//        BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
+//        playIV.setOnClickListener(playBtnListener);
+//
+//        BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
+//        nextIV.setOnClickListener(nextBtnListener);
+//
+//        BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
+//        lastIV.setOnClickListener(lastBtnListener);
 
     }
 

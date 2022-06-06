@@ -33,7 +33,7 @@ import java.util.List;
 
 public class PlayerActivity extends AppCompatActivity {
 
-    private Button playBtn,nextBtn,prevBtn,ffBtn,frBtn;
+    private Button playBtn,nextBtn,prevBtn,ffBtn,frBtn,typeBtn,collectBtn,listBtn;
 
     private TextView songNameTV,startTV,stopTV;
 
@@ -84,6 +84,9 @@ public class PlayerActivity extends AppCompatActivity {
         playBtn = findViewById(R.id.play_btn);
         ffBtn = findViewById(R.id.ff_btn);
         frBtn = findViewById(R.id.fr_btn);
+        typeBtn = findViewById(R.id.player_status);
+        collectBtn = findViewById(R.id.collect_song);
+        listBtn = findViewById(R.id.song_list);
         songNameTV = findViewById(R.id.song_name);
         startTV = findViewById(R.id.start_txt);
         stopTV = findViewById(R.id.stop_txt);
@@ -127,6 +130,14 @@ public class PlayerActivity extends AppCompatActivity {
 
         BtnListener rewardBtnListener = new BtnListener(player, BtnTypes.REWARD);
         frBtn.setOnClickListener(rewardBtnListener);
+
+        BtnListener changeTypeBtnListener = new BtnListener(player, BtnTypes.PLAY_STATUS_CHANGE);
+        typeBtn.setOnClickListener(changeTypeBtnListener);
+
+        BtnListener collectBtnListener = new BtnListener(player, BtnTypes.COLLECT);
+        collectBtn.setOnClickListener(collectBtnListener);
+
+        //
 
         seekBarUpdate = new Thread(){
             @Override

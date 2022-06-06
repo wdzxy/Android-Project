@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.bean.PathBean;
+import com.example.listener.BtnListener;
+import com.example.listener.BtnTypes;
 import com.example.musicplayer.Fragment.AlbumFragment;
 import com.example.musicplayer.Fragment.PathFragment;
 import com.example.musicplayer.Fragment.SingerFragment;
@@ -87,6 +89,15 @@ public class LocalMusicActivity extends AppCompatActivity {
 
         player = Player.getPlayer(this);
         player.addView(songTV,singerTV,playIV);
+
+        BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
+        playIV.setOnClickListener(playBtnListener);
+
+        BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
+        nextIV.setOnClickListener(nextBtnListener);
+
+        BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
+        lastIV.setOnClickListener(lastBtnListener);
 
         RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
         bottomPlayer.setOnClickListener(new View.OnClickListener() {

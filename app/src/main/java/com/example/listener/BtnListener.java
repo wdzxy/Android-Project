@@ -1,5 +1,6 @@
 package com.example.listener;
 
+import android.telephony.mbms.MbmsErrors;
 import android.view.View;
 
 import com.example.musicplayer.R;
@@ -39,6 +40,23 @@ public class BtnListener implements View.OnClickListener {
                     current -= 1000;
                 }
                 player.seekTo(current);
+                break;
+            case BtnTypes.PLAY_STATUS_CHANGE:
+                int type = player.getListener().changeType();
+                int drawableId;
+                if (type == PlayTypes.LOOP_ONE){
+                    drawableId = R.drawable.ic_loop_one;
+                }else if (type == PlayTypes.ORDER){
+                    drawableId = R.drawable.ic_list_order;
+                }else if (type == PlayTypes.LOOP){
+                    drawableId = R.drawable.ic_loop;
+                }else {
+                    drawableId = R.drawable.ic_random;
+                }
+                v.setBackgroundResource(drawableId);
+                break;
+            case BtnTypes.COLLECT:
+                break;
         }
     }
 }

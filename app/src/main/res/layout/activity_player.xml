@@ -79,7 +79,7 @@
             android:layout_height="60dp">
 
             <SeekBar
-                android:layout_width="250dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/seek_bar"
                 android:layout_centerInParent="true"
@@ -163,6 +163,36 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/ic_fast_rewind"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/play_btn">
+
+                <Button
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/player_status"
+                    android:layout_marginRight="70dp"
+                    android:layout_toLeftOf="@id/collect_song"
+                    android:background="@drawable/ic_loop_one"/>
+
+                <Button
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/collect_song"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ic_un_clollected"/>
+
+                <Button
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/song_list"
+                    android:layout_marginLeft="70dp"
+                    android:layout_toRightOf="@+id/collect_song"
+                    android:background="@drawable/ic_list"/>
+
+            </RelativeLayout>
 
             <com.gauravk.audiovisualizer.visualizer.BarVisualizer
                 android:layout_width="match_parent"

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public class Player {
@@ -93,6 +94,10 @@ public class Player {
 
     public void setList(List<SingleSongBean> list) {
         this.list = list;
+    }
+
+    public OnCompletionListener getListener() {
+        return listener;
     }
 
     /**
@@ -346,6 +351,30 @@ public class Player {
             stop();
             start(currentSong);
             return true;
+        }
+    }
+
+    /**
+     * 播放列表中的第一首
+     */
+    public void playFirst(){
+        if (list != null && list.size() > 1){
+            currentSong = list.get(0);
+            stop();
+            start(currentSong);
+        }
+    }
+
+    /**
+     * 随机播放
+     */
+    public void randomPlay(){
+        if (list != null && list.size() > 1){
+            Random random = new Random();
+            int nextInt = random.nextInt(list.size());
+            currentSong = list.get(nextInt);
+            stop();
+            start(currentSong);
         }
     }
 
