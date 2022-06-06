@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LocalMusicActivity">
+    tools:context=".AlbumSingleActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -43,28 +43,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.xuexiang.xui.widget.tabbar.EasyIndicator
-        android:id="@+id/local_music_easyIndicator"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:indicator_bottom_line_color="#000000"
-        app:indicator_height="60dp"
-        app:indicator_line_color="#03DAC5"
-        app:indicator_line_show="true"
-        app:indicator_normal_color="#9C9C9C"
-        app:indicator_select_textSize="16sp"
-        app:indicator_selected_color="#03DAC5"
-        app:indicator_textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/local_music_viewpager"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/album_single_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_layout" />

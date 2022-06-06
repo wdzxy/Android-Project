@@ -1,5 +1,6 @@
 package com.example.musicplayer.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class SingleSongAdapter extends RecyclerView.Adapter<SingleSongAdapter.Si
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SingleSongViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SingleSongViewHolder holder, @SuppressLint("RecyclerView") int position) {
         SingleSongBean singleSongBean = list.get(position);
 
         holder.idTV.setText(singleSongBean.getId());

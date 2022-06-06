@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/drawable/ic_download.xml" value="0.1365" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/drawable/ic_fast_forward.xml" value="0.1365" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_album_single.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_local_music.xml" value="0.264" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_main.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_player.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_album.xml" value="0.30244530244530243" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_music_lib.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_my_music.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_path.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_singer.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_single_song.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_album.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_path.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_singer.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_single_song_item.xml" value="0.27447916666666666" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

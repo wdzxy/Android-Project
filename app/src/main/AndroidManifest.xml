@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".InitConfig"
@@ -15,11 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer">
-        <activity android:name=".PlayerActivity"></activity>
+        <activity
+            android:name=".AlbumSingleActivity"
+            android:exported="false" />
+        <activity android:name=".PlayerActivity" />
         <activity
             android:name=".LocalMusicActivity"
             android:label="@string/title_activity_local_music"
-            android:theme="@style/Theme.MusicPlayer.NoActionBar"></activity>
+            android:theme="@style/Theme.MusicPlayer.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

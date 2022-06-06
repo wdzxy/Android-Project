@@ -1,5 +1,6 @@
 package com.example.musicplayer.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bean.AlbumBean;
+import com.example.bean.SingleSongBean;
 import com.example.musicplayer.R;
 
 import java.util.List;
@@ -18,6 +20,16 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
     private List<AlbumBean> list;
     private Context context;
+
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener{
+        public void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(AlbumAdapter.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public AlbumAdapter(List<AlbumBean> list, Context context) {
         this.list = list;
@@ -34,7 +46,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AlbumViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         //将list中的数据绑定到view中
         AlbumBean albumBean = list.get(position);
@@ -43,6 +55,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 //        }
         holder.nameView.setText(albumBean.getAlbumName());
         holder.countView.setText(String.valueOf(albumBean.getCount())+"首");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onItemClick(v,position);
+            }
+        });
     }
 
     @Override

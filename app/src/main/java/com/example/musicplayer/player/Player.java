@@ -154,6 +154,10 @@ public class Player {
         return pathBeans;
     }
 
+    public List<SingleSongBean> getListByAlbum(String album){
+        return albumMap.get(album);
+    }
+
     /**
      * 加载本地音乐，并根据专辑、歌手、文件夹分组
      */
