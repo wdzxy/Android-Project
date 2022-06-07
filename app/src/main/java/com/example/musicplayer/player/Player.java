@@ -154,8 +154,49 @@ public class Player {
         return pathBeans;
     }
 
+    /**
+     * 根据专辑名获取歌曲列表
+     * @param album
+     * @return
+     */
     public List<SingleSongBean> getListByAlbum(String album){
         return albumMap.get(album);
+    }
+
+    /**
+     * 根据歌手获取歌曲列表
+     * @param singer
+     * @return
+     */
+    public List<SingleSongBean> getListBySinger(String singer){
+        return singerMap.get(singer);
+    }
+
+    /**
+     * 根据文件夹获取歌曲列表
+     * @param path
+     * @return
+     */
+    public List<SingleSongBean> getListByPath(String path){
+        return pathMap.get(path);
+    }
+
+    /**
+     * 根据歌曲的id获取歌曲列表，id为数据库中存储的id
+     * @param ids
+     * @return
+     */
+    public List<SingleSongBean> getListBySongId(List<String> ids){
+        ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>();
+
+        for (SingleSongBean bean :
+                list) {
+            if (ids.contains(bean.getID())){
+                singleSongBeans.add(bean);
+            }
+        }
+
+        return singleSongBeans;
     }
 
     /**
@@ -181,6 +222,7 @@ public class Player {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
             String time = simpleDateFormat.format(new Date(duration));
             String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+            String ID = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
 
             //将一行数据封装到对象中
             SingleSongBean singleSongBean = new SingleSongBean(
@@ -189,7 +231,8 @@ public class Player {
                     singer,
                     time,
                     path,
-                    album
+                    album,
+                    ID
             );
             list.add(singleSongBean);
 
