@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/layout/activity_local_music.xml" value="0.19610507246376813" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/layout/activity_main.xml" value="0.13069908814589665" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/layout/activity_single_song.xml" value="0.13069908814589665" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/layout/fragment_singer.xml" value="0.13069908814589665" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/drawable/ic_download.xml" value="0.1365" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/drawable/ic_fast_forward.xml" value="0.1365" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_album_single.xml" value="0.12604166666666666" />

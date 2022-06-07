@@ -8,27 +8,30 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.media.session.MediaButtonReceiver;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.bean.SingleSongBean;
-import com.example.musicplayer.broadcast.MyBroadcastReceiver;
 import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
 import com.example.musicplayer.Fragment.MusicLibFragment;
 import com.example.musicplayer.Fragment.MyMusicFragment;
-import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 import com.xuexiang.xui.widget.tabbar.EasyIndicator;
 
@@ -47,6 +50,30 @@ public class MainActivity extends AppCompatActivity {
     private Button nextIV,playIV,lastIV;
 
     private TextView songTV,singerTV;
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            player = Player.getPlayer(context);
+            final String NEXT = "NEXT";
+            final String PREV = "PREV";
+            final String PAUSE = "PAUSE";
+            switch (intent.getAction()){
+                case NEXT:
+                    player.playNext();
+                    sendNotification();
+                    break;
+                case PREV:
+                    player.playLast();
+                    sendNotification();
+                    break;
+                case PAUSE:
+                    player.play();
+                    sendNotification();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +135,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        Notification notification = new Notification(this);
-        notification.sendnotification();
+
+        String NOTIFICATION_ACTION = "21";
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("PREV");
+        intentFilter.addAction("PAUSE");
+        intentFilter.addAction("NEXT");
+        registerReceiver(broadcastReceiver,intentFilter);
+
+        sendNotification();
     }
 
     @Override
@@ -136,4 +171,62 @@ public class MainActivity extends AppCompatActivity {
             return fragments.size();
         }
     }
+
+    private void sendNotification(){
+        final String id ="channel_1";//⾃定义设置ID通道描述属性
+        final String description ="123";//通知栏管理重要提⽰消息声⾳设定
+        final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel mChannel =new NotificationChannel(id,"123", importance);
+        manager.createNotificationChannel(mChannel);
+
+        //前一首
+        Intent prevIntent = new Intent();
+        prevIntent.setAction("PREV");
+        PendingIntent prevPendingIntent =
+                PendingIntent.getBroadcast(this, 0, prevIntent, 0);
+
+        //暂停
+        Intent pauseIntent = new Intent();
+        pauseIntent.setAction("PAUSE");
+        PendingIntent pausePendingIntent =
+                PendingIntent.getBroadcast(this, 0, pauseIntent, 0);
+
+        //下一首
+        Intent nextIntent = new Intent();
+        nextIntent.setAction("NEXT");
+        PendingIntent nextPendingIntent =
+                PendingIntent.getBroadcast(this, 0, nextIntent, 0);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        Player player = Player.getPlayer(this);
+
+        SingleSongBean singleSongBean = player.getCurrentSong();
+
+        singerTV = findViewById(R.id.local_music_bottom_tv_singer);
+        songTV =  findViewById(R.id.local_music_bottom_tv_song);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, id)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setSmallIcon(R.drawable.ic_collect)
+                //按钮
+                .addAction(R.drawable.ic_prev,"Previous",prevPendingIntent)
+                .addAction(player.isPlaying()?R.drawable.ic_pause:R.drawable.ic_play,"PAUSE",pausePendingIntent)
+                .addAction(R.drawable.ic_next,"Next",nextPendingIntent)
+                //style
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setShowActionsInCompactView(1 /* #1: pause button */))
+                //标题和文字
+                .setContentTitle(singerTV.getText().toString())
+                .setContentText(songTV.getText().toString())
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(1,builder.build());
+    }
+
 }
