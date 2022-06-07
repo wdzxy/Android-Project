@@ -1,8 +1,11 @@
 package com.example.listener;
 
+import android.content.Context;
 import android.telephony.mbms.MbmsErrors;
 import android.view.View;
 
+import com.example.bean.SingleSongBean;
+import com.example.db.DBHelper;
 import com.example.musicplayer.R;
 import com.example.musicplayer.player.Player;
 
@@ -12,9 +15,21 @@ public class BtnListener implements View.OnClickListener {
 
     private int btnType;
 
+    private Context context;
+
+    private SingleSongBean currentSong;
+
     public BtnListener(Player player,int btnType){
         this.player = player;
         this.btnType = btnType;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void setCurrentSong(SingleSongBean currentSong) {
+        this.currentSong = currentSong;
     }
 
     @Override
@@ -56,6 +71,19 @@ public class BtnListener implements View.OnClickListener {
                 v.setBackgroundResource(drawableId);
                 break;
             case BtnTypes.COLLECT:
+                //判断当前歌曲是否已收藏
+                DBHelper dbHelper = new DBHelper(context);
+                currentSong = player.getCurrentSong();
+                boolean collected = dbHelper.isCollected(currentSong.getID());
+                if (collected){
+                    //取消收藏
+                    dbHelper.unCollect(currentSong.getID());
+                    v.setBackgroundResource(R.drawable.ic_un_clollected);
+                }else {
+                    //收藏
+                    dbHelper.collect(currentSong.getID(),currentSong.getSong());
+                    v.setBackgroundResource(R.drawable.ic_collect);
+                }
                 break;
         }
     }

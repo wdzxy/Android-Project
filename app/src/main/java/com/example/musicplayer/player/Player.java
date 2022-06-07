@@ -537,4 +537,8 @@ public class Player {
     public boolean getStatus() {
         return status;
     }
+
+    public SingleSongBean getCurrentSong(){
+        return currentSong;
+    }
 }

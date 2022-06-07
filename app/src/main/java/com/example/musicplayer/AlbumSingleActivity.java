@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.example.bean.PathBean;
 import com.example.bean.SingleSongBean;
+import com.example.db.DBHelper;
 import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
 import com.example.musicplayer.Fragment.AlbumFragment;
@@ -43,8 +44,6 @@ public class AlbumSingleActivity extends AppCompatActivity {
 
     private RecyclerView musicRV;
 
-    private List<Fragment> fragments;
-
     private Player player;
 
     private SingleSongAdapter adapter;
@@ -52,7 +51,7 @@ public class AlbumSingleActivity extends AppCompatActivity {
     //底部播放器
     private Button nextIV,playIV,lastIV;
 
-    private TextView songTV,singerTV;
+    private TextView songTV,singerTV,titleTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,20 +63,29 @@ public class AlbumSingleActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
-        String album = intent.getStringExtra("album");
+        String listType = intent.getStringExtra("listType");
+        String arg = intent.getStringExtra("arg");
+
+        titleTV = findViewById(R.id.title_name);
 
         player = Player.getPlayer(getApplicationContext());
         //获取RecyclerView
         musicRV = (RecyclerView) findViewById(R.id.album_single_rv);
-        System.out.println(musicRV);
         //设置适配器
-        adapter = new SingleSongAdapter(player.getListByAlbum(album), getApplicationContext());
+        if ("album".equals(listType)) {
+            adapter = new SingleSongAdapter(player.getListByAlbum(arg), getApplicationContext());
+            titleTV.setText(arg);
+        }else if ("collection".equals(listType)){
+            DBHelper dbHelper = new DBHelper(getApplicationContext());
+            adapter = new SingleSongAdapter(dbHelper.getCollections(),getApplicationContext());
+            titleTV.setText("我的收藏");
+        }
         //设置监听事件
         adapter.setOnItemClickListener(new SingleSongAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 int currentPosistion = position;
-                SingleSongBean singleSongBean = player.getListByAlbum(album).get(currentPosistion);
+                SingleSongBean singleSongBean = adapter.getList().get(currentPosistion);
                 //设置底部歌曲和歌手名
                 singerTV.setText(singleSongBean.getSinger());
                 songTV.setText(singleSongBean.getSong());
@@ -92,10 +100,6 @@ public class AlbumSingleActivity extends AppCompatActivity {
         //设置布局管理器，垂直，不反转
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         musicRV.setLayoutManager(linearLayoutManager);
-
-
-
-
 
         //底部播放器
         nextIV = (Button) findViewById(R.id.local_music_bottom_iv_next);
@@ -146,21 +150,4 @@ public class AlbumSingleActivity extends AppCompatActivity {
         playIV.setBackgroundResource(R.drawable.ic_play);//此处应使用播放图标，需要替换
     }
 
-    class LocalMusciFragmentAdapter extends FragmentPagerAdapter{
-
-        public LocalMusciFragmentAdapter(@NonNull FragmentManager fm) {
-            super(fm);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragments == null ? null : fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments == null ? 0 : fragments.size();
-        }
-    }
 }

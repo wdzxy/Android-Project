@@ -192,4 +192,49 @@ public class DBHelper extends SQLiteOpenHelper {
         int id = db.delete(Collection.TABLE_NAME, Collection.COLUMN_ID + "=?", new String[]{songID});
         return id;
     }
+
+    /**
+     * 获取收藏的单曲
+     * @return
+     */
+    public List<SingleSongBean> getCollections(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                Collection.TABLE_NAME,
+                new String[]{Collection.COLUMN_ID, Collection.COLUMN_SONG_NAME},
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        ArrayList<String> ids = new ArrayList<>();
+        while (cursor != null && cursor.moveToNext()){
+            String id = cursor.getString(cursor.getColumnIndex(Collection.COLUMN_ID));
+            ids.add(id);
+        }
+
+        Player player = Player.getPlayer(null);
+        List<SingleSongBean> listBySongId = player.getListBySongId(ids);
+        System.out.println(listBySongId.size());
+        return listBySongId;
+    }
+
+    public boolean isCollected(String songId){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                Collection.TABLE_NAME,
+                null,
+                Collection.COLUMN_ID+"=?",
+                new String[]{songId},
+                null,
+                null,
+                null
+        );
+
+        return cursor.getCount() > 0;
+    }
 }

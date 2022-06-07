@@ -23,6 +23,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.bean.SingleSongBean;
+import com.example.db.DBHelper;
 import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
 import com.example.musicplayer.player.Player;
@@ -46,6 +47,8 @@ public class PlayerActivity extends AppCompatActivity {
     private static final String EXTRA_NAME = "song_name";
 
     private Player player;
+
+    private DBHelper dbHelper;
 
     private List<SingleSongBean> list;
 
@@ -95,6 +98,16 @@ public class PlayerActivity extends AppCompatActivity {
         visualizer = findViewById(R.id.blast);
 
         player = Player.getPlayer(this);
+        dbHelper = new DBHelper(getApplicationContext());
+
+        SingleSongBean currentSong = player.getCurrentSong();
+        boolean collected = dbHelper.isCollected(currentSong.getID());
+
+        if (collected){
+            collectBtn.setBackgroundResource(R.drawable.ic_collect);
+        }else {
+            collectBtn.setBackgroundResource(R.drawable.ic_un_clollected);
+        }
 
         int audioSessionId = player.getAudioSessionId();
         if (audioSessionId != -1){
@@ -102,14 +115,13 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
 
         if (player.isPlaying()){
             playBtn.setBackgroundResource(R.drawable.ic_pause);
             startAnimation();
         }
 
-        list = (ArrayList) bundle.getParcelableArrayList("songList");
+        list = player.getSingleSongList();
         String songName = intent.getStringExtra("songName");
         songNameTV.setSelected(true);
         songNameTV.setText(songName);
@@ -135,6 +147,7 @@ public class PlayerActivity extends AppCompatActivity {
         typeBtn.setOnClickListener(changeTypeBtnListener);
 
         BtnListener collectBtnListener = new BtnListener(player, BtnTypes.COLLECT);
+        collectBtnListener.setContext(getApplicationContext());
         collectBtn.setOnClickListener(collectBtnListener);
 
         //
