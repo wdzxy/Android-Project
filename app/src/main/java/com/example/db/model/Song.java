@@ -11,7 +11,7 @@ public class Song {
     public static final String COLUMN_LIST_ID = "list_id";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
-            + COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_SONG_ID + " TEXT,"
             + COLUMN_LIST_ID + " INTEGER"
             + ")";

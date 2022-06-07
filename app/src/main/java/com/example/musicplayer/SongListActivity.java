@@ -1,6 +1,7 @@
 package com.example.musicplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,6 +44,8 @@ public class SongListActivity extends AppCompatActivity {
 
     private Player player;
 
+    private TextView titleTV;
+
     private ListSingleSongAdapter adapter;
 
     @Override
@@ -49,17 +53,27 @@ public class SongListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
 
-        player = Player.getPlayer(getApplicationContext());
-
-        songListNameTV = findViewById(R.id.song_list_name);
-        songListCountTV = findViewById(R.id.song_list_count);
-        songListCreateTimeTV = findViewById(R.id.song_list_create_time);
-
         Intent intent = getIntent();
         String listId = intent.getStringExtra("listId");
         String listName = intent.getStringExtra("listName");
         String listCount = intent.getStringExtra("listCount");
         String listCreateTime = intent.getStringExtra("listCreateTime");
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle(listName);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        titleTV = findViewById(R.id.title_name);
+        titleTV.setText(listName);
+
+        player = Player.getPlayer(getApplicationContext());
+
+        songListNameTV = findViewById(R.id.song_list_name);
+        songListCountTV = findViewById(R.id.song_list_count);
+        songListCreateTimeTV = findViewById(R.id.song_list_create_time);
 
         songListNameTV.setText(listName);
         songListCountTV.setText(listCount + "首");
@@ -146,6 +160,13 @@ public class SongListActivity extends AppCompatActivity {
                 })
                 .map(SingleSongBean::getSong)
                 .collect(Collectors.toList());
+        List<String> songIDs = singleSongList
+                .stream()
+                .filter(bean -> {
+                    return !contains.contains(bean);
+                })
+                .map(SingleSongBean::getID)
+                .collect(Collectors.toList());
         final String[] items = collect.toArray(new String[collect.size()]);
         //选中的单曲的ID
         ArrayList<String> yourChoices = new ArrayList<>();
@@ -159,11 +180,11 @@ public class SongListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which,
                                         boolean isChecked) {
-                        SingleSongBean singleSongBean = singleSongList.get(which);
+                        String songID = songIDs.get(which);
                         if (isChecked) {
-                            yourChoices.add(singleSongBean.getID());
+                            yourChoices.add(songID);
                         } else {
-                            yourChoices.remove(singleSongBean.getID());
+                            yourChoices.remove(songID);
                         }
                     }
                 });
@@ -199,5 +220,15 @@ public class SongListActivity extends AppCompatActivity {
         player.stop();
         //修改播放按钮
         playIV.setBackgroundResource(R.drawable.ic_play);//此处应使用播放图标，需要替换
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish(); // back button
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

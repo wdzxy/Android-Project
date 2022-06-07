@@ -26,6 +26,7 @@ import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
 import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
+import com.example.listener.PlayTypes;
 import com.example.musicplayer.player.Player;
 import com.gauravk.audiovisualizer.visualizer.BarVisualizer;
 
@@ -145,6 +146,18 @@ public class PlayerActivity extends AppCompatActivity {
 
         BtnListener changeTypeBtnListener = new BtnListener(player, BtnTypes.PLAY_STATUS_CHANGE);
         typeBtn.setOnClickListener(changeTypeBtnListener);
+        int type = player.getListener().getPlayType();
+        int drawableId;
+        if (type == PlayTypes.LOOP_ONE){
+            drawableId = R.drawable.ic_loop_one;
+        }else if (type == PlayTypes.ORDER){
+            drawableId = R.drawable.ic_list_order;
+        }else if (type == PlayTypes.LOOP){
+            drawableId = R.drawable.ic_loop;
+        }else {
+            drawableId = R.drawable.ic_random;
+        }
+        typeBtn.setBackgroundResource(drawableId);
 
         BtnListener collectBtnListener = new BtnListener(player, BtnTypes.COLLECT);
         collectBtnListener.setContext(getApplicationContext());
@@ -213,11 +226,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     public void startAnimation(){
-//        ObjectAnimator animator = ObjectAnimator.ofFloat(songImg,"rotation",0f,360f);
-//        animator.setDuration(1000);
-//        AnimatorSet animatorSet = new AnimatorSet();
-//        animatorSet.play(animator);
-//        animatorSet.start();
+
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.img_animation);
         LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
         animation.setInterpolator(lin);

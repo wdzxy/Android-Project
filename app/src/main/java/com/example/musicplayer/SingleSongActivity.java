@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.FrameMetrics;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -139,6 +140,16 @@ public class SingleSongActivity extends AppCompatActivity {
         player.stop();
         //修改播放按钮
         playIV.setBackgroundResource(R.drawable.ic_play);//此处应使用播放图标，需要替换
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish(); // back button
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     class LocalMusciFragmentAdapter extends FragmentPagerAdapter{
