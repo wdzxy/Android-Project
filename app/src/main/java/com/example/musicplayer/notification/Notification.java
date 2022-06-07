@@ -19,10 +19,8 @@ public class Notification {
 
     private final String id ="channel_1";//⾃定义设置ID通道描述属性
     private final String description ="123";//通知栏管理重要提⽰消息声⾳设定
-    private static Notification notification;
 
     private Context context;
-    private Player player;
     PendingIntent prevPendingIntent,nextPendingIntent,pausePendingIntent,pendingIntent;
 
     public Notification(Context context){
@@ -73,22 +71,12 @@ public class Notification {
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(1 /* #1: pause button */))
                 //标题和文字
-                .setContentTitle(singleSongBean.getSong())
-                .setContentText(singleSongBean.getSinger())
+                .setContentTitle("singleSongBean.getSong()")
+                .setContentText("singleSongBean.getSinger()")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(1,builder.build());
     }
 
-    public static Notification getNotification(Context context){
-        if (notification == null){
-            synchronized (Notification.class){
-                if (notification == null){
-                    notification = new Notification(context);
-                }
-            }
-        }
-        return notification;
-    }
 }

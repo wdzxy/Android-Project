@@ -37,7 +37,7 @@ public class BtnListener implements View.OnClickListener {
     public void onClick(View v) {
         switch (btnType){
             case BtnTypes.PLAY:
-                Notification notification = Notification.getNotification(context);
+                Notification notification = new Notification(context);
                 notification.sendnotification();
                 player.play();
                 break;

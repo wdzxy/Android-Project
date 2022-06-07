@@ -22,11 +22,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bean.SingleSongBean;
 import com.example.musicplayer.broadcast.MyBroadcastReceiver;
 import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
 import com.example.musicplayer.Fragment.MusicLibFragment;
 import com.example.musicplayer.Fragment.MyMusicFragment;
+import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 import com.xuexiang.xui.widget.tabbar.EasyIndicator;
 
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        Notification notification = new Notification(this);
+        notification.sendnotification();
     }
 
     @Override
