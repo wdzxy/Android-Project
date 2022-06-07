@@ -1,5 +1,6 @@
 package com.example.musicplayer.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,17 @@ public class SingerAdpter extends RecyclerView.Adapter<SingerAdpter.SingerViewHo
 
     private Context context;
 
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener{
+        public void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(SingerAdpter.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+
     public SingerAdpter(List<SingerBean> list, Context context) {
         this.list = list;
         this.context = context;
@@ -36,11 +48,19 @@ public class SingerAdpter extends RecyclerView.Adapter<SingerAdpter.SingerViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SingerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SingerViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         SingerBean singerBean = list.get(position);
         holder.singer.setText(singerBean.getSinger());
         holder.count.setText(singerBean.getCount()+"首");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onItemClick(v,position);
+            }
+        });
+
     }
 
     @Override

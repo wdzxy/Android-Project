@@ -18,6 +18,7 @@ import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
 import com.example.listener.OnCompletionListener;
 import com.example.musicplayer.R;
+import com.example.musicplayer.notification.Notification;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -71,8 +72,6 @@ public class Player {
 
     private OnCompletionListener listener;
 
-    private DBHelper dbHelper;
-
     private Player(Context context){
         this.context = context;
         mediaPlayer = new MediaPlayer();
@@ -84,7 +83,6 @@ public class Player {
         singerTvList = new ArrayList<>(3);
         playIvList = new ArrayList<>(3);
         listener = new OnCompletionListener(this);
-        dbHelper = new DBHelper(context);
         loadData();
     }
 
@@ -186,7 +184,7 @@ public class Player {
     }
 
     /**
-     * 根据歌曲的id获取歌曲列表，id为数据库中存储的id，结果中不重复
+     * 根据歌曲的id获取歌曲列表，id为数据库中存储的id
      * @param ids
      * @return
      */
@@ -200,19 +198,6 @@ public class Player {
             }
         }
 
-        return singleSongBeans;
-    }
-
-    public List<SingleSongBean> getRecentPlayBySongId(List<String> ids){
-        ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>();
-        for (int i = 0; i < ids.size(); i++) {
-            for (int j = 0; j < list.size(); j++) {
-                SingleSongBean singleSongBean = list.get(j);
-                if (singleSongBean.getID().equals(ids.get(i))){
-                    singleSongBeans.add(singleSongBean);
-                }
-            }
-        }
         return singleSongBeans;
     }
 
@@ -311,13 +296,6 @@ public class Player {
         currentSong = bean;
         setPath(bean.getPath());
         if (mediaPlayer != null && !status){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    //将当前单曲添加到最近播放，使用其他线程防止主线程卡死
-                    dbHelper.insertRecentPlay(currentSong.getID(),currentSong.getSong());
-                }
-            }).start();
             mediaPlayer = MediaPlayer.create(context,Uri.parse(musicPath));
             mediaPlayer.setOnCompletionListener(listener);
             mediaPlayer.start();

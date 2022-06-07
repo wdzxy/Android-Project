@@ -18,6 +18,9 @@
         android:theme="@style/Theme.MusicPlayer">
         <activity android:name=".SongListActivity"></activity>
         <activity
+            android:name=".SingleSongActivity"
+            android:exported="false" />
+        <activity
             android:name=".AlbumSingleActivity"
             android:exported="false" />
         <activity android:name=".PlayerActivity" />
