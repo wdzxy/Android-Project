@@ -26,8 +26,8 @@
         android:id="@+id/viewPager"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@id/easy_indicator"
-        android:layout_above="@id/bottom_layout"/>
+        android:layout_above="@id/bottom_layout"
+        android:layout_below="@id/easy_indicator" />
 
     <RelativeLayout
         android:layout_width="match_parent"

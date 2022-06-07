@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
+import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.R;
-import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 
 public class BtnListener implements View.OnClickListener {

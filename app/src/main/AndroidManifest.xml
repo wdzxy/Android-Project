@@ -36,16 +36,6 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".broadcast.MyBroadcastReceiver"
-            android:exported="true"
-            tools:ignore="Instantiatable">
-            <intent-filter>
-                <action android:name="com.example.musicplayer.broadcast.NEXT" />
-                <action android:name="com.example.musicplayer.broadcast.PAUSE" />
-                <action android:name="com.example.musicplayer.broadcast.PREV" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>
