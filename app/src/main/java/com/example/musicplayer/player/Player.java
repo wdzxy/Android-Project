@@ -17,6 +17,7 @@ import com.example.bean.SingerBean;
 import com.example.bean.SingleSongBean;
 import com.example.listener.OnCompletionListener;
 import com.example.musicplayer.R;
+import com.example.musicplayer.notification.Notification;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -69,6 +70,7 @@ public class Player {
     private List<Button> playIvList;
 
     private OnCompletionListener listener;
+
 
     private Player(Context context){
         this.context = context;

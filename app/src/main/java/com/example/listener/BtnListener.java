@@ -7,6 +7,7 @@ import android.view.View;
 import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
 import com.example.musicplayer.R;
+import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 
 public class BtnListener implements View.OnClickListener {
@@ -36,6 +37,8 @@ public class BtnListener implements View.OnClickListener {
     public void onClick(View v) {
         switch (btnType){
             case BtnTypes.PLAY:
+                Notification notification = Notification.getNotification(context);
+                notification.sendnotification();
                 player.play();
                 break;
             case BtnTypes.NEXT:
