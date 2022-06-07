@@ -71,15 +71,9 @@ public class AlbumSingleActivity extends AppCompatActivity {
         player = Player.getPlayer(getApplicationContext());
         //获取RecyclerView
         musicRV = (RecyclerView) findViewById(R.id.album_single_rv);
-        //设置适配器
-        if ("album".equals(listType)) {
-            adapter = new SingleSongAdapter(player.getListByAlbum(arg), getApplicationContext());
-            titleTV.setText(arg);
-        }else if ("collection".equals(listType)){
-            DBHelper dbHelper = new DBHelper(getApplicationContext());
-            adapter = new SingleSongAdapter(dbHelper.getCollections(),getApplicationContext());
-            titleTV.setText("我的收藏");
-        }
+        adapter = new SingleSongAdapter(new ArrayList<SingleSongBean>(),getApplicationContext());
+        musicRV.setAdapter(adapter);
+
         //设置监听事件
         adapter.setOnItemClickListener(new SingleSongAdapter.OnItemClickListener() {
             @Override
@@ -96,10 +90,37 @@ public class AlbumSingleActivity extends AppCompatActivity {
             }
         });
 //        setEventList();
-        musicRV.setAdapter(adapter);
         //设置布局管理器，垂直，不反转
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         musicRV.setLayoutManager(linearLayoutManager);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //设置适配器
+                if ("album".equals(listType)) {
+                    adapter.setList(player.getListByAlbum(arg));
+                    adapter.notifyDataSetChanged();
+                    titleTV.setText(arg);
+                }else if ("collection".equals(listType)){
+                    DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    adapter.setList(dbHelper.getCollections());
+                    adapter.notifyDataSetChanged();
+                    titleTV.setText("我的收藏");
+                }else if ("recentList".equals(listType)){
+                    DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    adapter.setList(dbHelper.getRecentList());
+                    adapter.notifyDataSetChanged();
+                    titleTV.setText("最近播放");
+                }else if ("songList".equals(listType)){
+                    DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    adapter.setList(dbHelper.getSongListByListId(Integer.parseInt(arg)));
+                    adapter.notifyDataSetChanged();
+                    String listName = intent.getStringExtra("listName");
+                    titleTV.setText(listName);
+                }
+            }
+        }).start();
 
         //底部播放器
         nextIV = (Button) findViewById(R.id.local_music_bottom_iv_next);

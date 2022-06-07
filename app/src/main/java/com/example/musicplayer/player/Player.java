@@ -15,6 +15,7 @@ import com.example.bean.AlbumBean;
 import com.example.bean.PathBean;
 import com.example.bean.SingerBean;
 import com.example.bean.SingleSongBean;
+import com.example.db.DBHelper;
 import com.example.listener.OnCompletionListener;
 import com.example.musicplayer.R;
 import com.example.musicplayer.notification.Notification;
@@ -70,7 +71,6 @@ public class Player {
     private List<Button> playIvList;
 
     private OnCompletionListener listener;
-
 
     private Player(Context context){
         this.context = context;
@@ -198,6 +198,19 @@ public class Player {
             }
         }
 
+        return singleSongBeans;
+    }
+
+    public List<SingleSongBean> getRecentPlayBySongId(List<String> ids){
+        ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>(ids.size());
+        for (int i = 0; i < ids.size(); i++) {
+            for (int j = 0; j < list.size(); j++) {
+                SingleSongBean singleSongBean = list.get(j);
+                if (ids.get(i).equals(singleSongBean.getID())){
+                    singleSongBeans.add(singleSongBean);
+                }
+            }
+        }
         return singleSongBeans;
     }
 
