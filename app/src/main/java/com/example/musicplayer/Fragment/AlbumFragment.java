@@ -78,7 +78,8 @@ public class AlbumFragment extends Fragment {
 
                 Intent intent = new Intent();
                 intent.setClass(getActivity().getApplicationContext(), AlbumSingleActivity.class);
-                intent.putExtra("album",albumTV.getText().toString());
+                intent.putExtra("listType","album");
+                intent.putExtra("arg",albumTV.getText().toString());
                 startActivity(intent);
             }
         });

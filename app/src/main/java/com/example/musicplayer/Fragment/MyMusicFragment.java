@@ -1,8 +1,10 @@
 package com.example.musicplayer.Fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,8 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.bean.AlbumBean;
+import com.example.bean.SongListBean;
+import com.example.db.DBHelper;
+import com.example.musicplayer.AlbumSingleActivity;
+import com.example.musicplayer.PlayerActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.adapter.AlbumAdapter;
+import com.example.musicplayer.adapter.SongListAdapter;
 import com.example.musicplayer.player.Player;
 
 import java.util.List;
@@ -30,7 +37,7 @@ public class MyMusicFragment extends Fragment {
 
     private Player player;
 
-    private Button localMusic;
+    private Button localMusic,myCollection;
 
     public MyMusicFragment() {
         // Required empty public constructor
@@ -52,6 +59,7 @@ public class MyMusicFragment extends Fragment {
         return fragment;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +69,16 @@ public class MyMusicFragment extends Fragment {
             root = getActivity().getLayoutInflater().inflate(R.layout.fragment_my_music, null);
         }
 
-        //主页专辑
+        //主页歌单
         player = Player.getPlayer(getContext());
-        List<AlbumBean> albumList = player.getAlbumList();
+//        List<AlbumBean> albumList = player.getAlbumList();
+        DBHelper dbHelper = new DBHelper(getContext());
+        List<SongListBean> songList = dbHelper.getSongList();
 
-        RecyclerView album = (RecyclerView)root.findViewById(R.id.main_song_sheet);
+        RecyclerView songListRV = (RecyclerView)root.findViewById(R.id.main_song_sheet);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        album.setLayoutManager(linearLayoutManager);
-        album.setAdapter(new AlbumAdapter(albumList,getActivity()));
+        songListRV.setLayoutManager(linearLayoutManager);
+        songListRV.setAdapter(new SongListAdapter(songList,getActivity()));
 
         localMusic = (Button) root.findViewById(R.id.local_music);
         localMusic.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +86,18 @@ public class MyMusicFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.example.musicplayer","com.example.musicplayer.LocalMusicActivity" );
+                startActivity(intent);
+            }
+        });
+
+        myCollection = root.findViewById(R.id.my_collection);
+        myCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity().getApplicationContext(), AlbumSingleActivity.class);
+                intent.putExtra("listType","collection");
+                intent.putExtra("arg","");
                 startActivity(intent);
             }
         });
