@@ -40,4 +40,8 @@ public class SongListBean {
     public void setCount(int count) {
         this.count = count;
     }
+
+    public int getId() {
+        return id;
+    }
 }

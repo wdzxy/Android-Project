@@ -39,6 +39,10 @@ public class SingleSongAdapter extends RecyclerView.Adapter<SingleSongAdapter.Si
         return list;
     }
 
+    public void setList(List<SingleSongBean> list) {
+        this.list = list;
+    }
+
     @NonNull
     @Override
     public SingleSongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

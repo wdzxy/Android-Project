@@ -112,7 +112,7 @@ public class DBHelper extends SQLiteOpenHelper {
             SongListBean songListBean = new SongListBean(
                     id,
                     name,
-                    createTime,
+                    createTime.substring(0,10),
                     songCursor.getCount()
             );
 
@@ -280,7 +280,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null,
-                null
+                RecentList.COLUMN_ID + " desc"
         );
 
         ArrayList<String> ids = new ArrayList<>();
@@ -290,9 +290,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         Player player = Player.getPlayer(null);
-        List<SingleSongBean> listBySongId = player.getListBySongId(ids);
+        List<SingleSongBean> listBySongId = player.getRecentPlayBySongId(ids);
 
-        Collections.reverse(listBySongId);
         return listBySongId;
     }
 }

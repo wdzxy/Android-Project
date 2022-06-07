@@ -186,7 +186,7 @@ public class Player {
     }
 
     /**
-     * 根据歌曲的id获取歌曲列表，id为数据库中存储的id
+     * 根据歌曲的id获取歌曲列表，id为数据库中存储的id，结果中不重复
      * @param ids
      * @return
      */
@@ -200,6 +200,19 @@ public class Player {
             }
         }
 
+        return singleSongBeans;
+    }
+
+    public List<SingleSongBean> getRecentPlayBySongId(List<String> ids){
+        ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>();
+        for (int i = 0; i < ids.size(); i++) {
+            for (int j = 0; j < list.size(); j++) {
+                SingleSongBean singleSongBean = list.get(j);
+                if (singleSongBean.getID().equals(ids.get(i))){
+                    singleSongBeans.add(singleSongBean);
+                }
+            }
+        }
         return singleSongBeans;
     }
 

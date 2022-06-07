@@ -1,5 +1,7 @@
 package com.example.musicplayer.Fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.bean.AlbumBean;
 import com.example.bean.SongListBean;
@@ -20,6 +24,7 @@ import com.example.db.DBHelper;
 import com.example.musicplayer.AlbumSingleActivity;
 import com.example.musicplayer.PlayerActivity;
 import com.example.musicplayer.R;
+import com.example.musicplayer.SongListActivity;
 import com.example.musicplayer.adapter.AlbumAdapter;
 import com.example.musicplayer.adapter.SongListAdapter;
 import com.example.musicplayer.player.Player;
@@ -38,6 +43,8 @@ public class MyMusicFragment extends Fragment {
     private Player player;
 
     private Button localMusic,myCollection,recentList;
+
+    private View createListV;
 
     public MyMusicFragment() {
         // Required empty public constructor
@@ -78,7 +85,21 @@ public class MyMusicFragment extends Fragment {
         RecyclerView songListRV = (RecyclerView)root.findViewById(R.id.main_song_sheet);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         songListRV.setLayoutManager(linearLayoutManager);
-        songListRV.setAdapter(new SongListAdapter(songList,getActivity()));
+        SongListAdapter songListAdapter = new SongListAdapter(songList, getActivity());
+        songListRV.setAdapter(songListAdapter);
+        songListAdapter.setOnItemClickListener(new SongListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                intent.setClass(getContext(), SongListActivity.class);
+                SongListBean songListBean = songList.get(position);
+                intent.putExtra("listId",String.valueOf(songListBean.getId()));
+                intent.putExtra("listName",songListBean.getName());
+                intent.putExtra("listCreateTime",songListBean.getCreateTime());
+                intent.putExtra("listCount",String.valueOf(songListBean.getCount()));
+                startActivity(intent);
+            }
+        });
 
         localMusic = (Button) root.findViewById(R.id.local_music);
         localMusic.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +134,30 @@ public class MyMusicFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        createListV = root.findViewById(R.id.create_list);
+        createListV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNewSongListDialog();
+            }
+        });
+    }
+
+    private void showNewSongListDialog() {
+        final EditText editText = new EditText(getContext());
+        AlertDialog.Builder inputDialog =
+                new AlertDialog.Builder(getContext());
+        inputDialog.setTitle("输入新建歌单标题").setView(editText);
+        inputDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String listName = editText.getText().toString();
+                        DBHelper dbHelper = new DBHelper(getContext());
+                        dbHelper.insertList(listName);
+                    }
+                }).show();
     }
 
     @Override

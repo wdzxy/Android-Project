@@ -46,7 +46,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
         SongListBean songListBean = list.get(position);
 
         holder.nameTV.setText(songListBean.getName());
-        holder.countTV.setText(songListBean.getCount());
+        holder.countTV.setText(String.valueOf(songListBean.getCount()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +71,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
             super(itemView);
 
             nameTV = itemView.findViewById(R.id.song_sheet_item_name);
-            countTV = itemView.findViewById(R.id.song_sheet_item_count);
+            countTV = itemView.findViewById(R.id.song_list_count);
         }
     }
 }
