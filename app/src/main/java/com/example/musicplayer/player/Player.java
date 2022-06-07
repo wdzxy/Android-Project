@@ -157,7 +157,9 @@ public class Player {
     public List<SingleSongBean> getListByAlbum(String album){
         return albumMap.get(album);
     }
-
+    public List<SingleSongBean> getListBySinger(String Singer){
+        return singerMap.get(Singer);
+    }
     /**
      * 加载本地音乐，并根据专辑、歌手、文件夹分组
      */

@@ -9,6 +9,7 @@
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_local_music.xml" value="0.264" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_main.xml" value="0.12604166666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_player.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/activity_single_song.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_album.xml" value="0.30244530244530243" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_music_lib.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_my_music.xml" value="0.27447916666666666" />
@@ -16,6 +17,7 @@
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_singer.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/fragment_single_song.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_album.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_main_song_sheet_item.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_path.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_singer.xml" value="0.12604166666666666" />
         <entry key="..\:/Users/hp/Desktop/Andriod/Android-Project/app/src/main/res/layout/recyclerview_single_song_item.xml" value="0.27447916666666666" />
