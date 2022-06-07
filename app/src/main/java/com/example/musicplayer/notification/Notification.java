@@ -29,9 +29,8 @@ public class Notification {
         this.context = context;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void sendnotification(){
-        final NotificationManager manager = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
+        final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel mChannel =new NotificationChannel(id,"123", importance);

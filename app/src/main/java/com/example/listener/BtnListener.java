@@ -1,5 +1,6 @@
 package com.example.listener;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.telephony.mbms.MbmsErrors;
 import android.view.View;
@@ -37,8 +38,6 @@ public class BtnListener implements View.OnClickListener {
     public void onClick(View v) {
         switch (btnType){
             case BtnTypes.PLAY:
-                Notification notification = new Notification(context);
-                notification.sendnotification();
                 player.play();
                 break;
             case BtnTypes.NEXT:
