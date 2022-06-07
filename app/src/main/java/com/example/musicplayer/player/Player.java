@@ -201,6 +201,19 @@ public class Player {
         return singleSongBeans;
     }
 
+    public List<SingleSongBean> getRecentPlayBySongId(List<String> ids){
+        ArrayList<SingleSongBean> singleSongBeans = new ArrayList<>(ids.size());
+        for (int i = 0; i < ids.size(); i++) {
+            for (int j = 0; j < list.size(); j++) {
+                SingleSongBean singleSongBean = list.get(j);
+                if (ids.get(i).equals(singleSongBean.getID())){
+                    singleSongBeans.add(singleSongBean);
+                }
+            }
+        }
+        return singleSongBeans;
+    }
+
     /**
      * 加载本地音乐，并根据专辑、歌手、文件夹分组
      */
