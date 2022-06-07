@@ -164,9 +164,7 @@ public class Player {
     public List<SingleSongBean> getListByAlbum(String album){
         return albumMap.get(album);
     }
-    public List<SingleSongBean> getListBySinger(String Singer){
-        return singerMap.get(Singer);
-    }
+
     /**
      * 根据歌手获取歌曲列表
      * @param singer
