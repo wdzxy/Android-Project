@@ -46,6 +46,10 @@ public class MyMusicFragment extends Fragment {
 
     private View createListV;
 
+    private DBHelper dbHelper;
+
+    private SongListAdapter songListAdapter;
+
     public MyMusicFragment() {
         // Required empty public constructor
     }
@@ -79,13 +83,13 @@ public class MyMusicFragment extends Fragment {
         //主页歌单
         player = Player.getPlayer(getContext());
 //        List<AlbumBean> albumList = player.getAlbumList();
-        DBHelper dbHelper = new DBHelper(getContext());
+        dbHelper = new DBHelper(getContext());
         List<SongListBean> songList = dbHelper.getSongList();
 
         RecyclerView songListRV = (RecyclerView)root.findViewById(R.id.main_song_sheet);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         songListRV.setLayoutManager(linearLayoutManager);
-        SongListAdapter songListAdapter = new SongListAdapter(songList, getActivity());
+        songListAdapter = new SongListAdapter(songList, getActivity());
         songListRV.setAdapter(songListAdapter);
         songListAdapter.setOnItemClickListener(new SongListAdapter.OnItemClickListener() {
             @Override
@@ -154,8 +158,12 @@ public class MyMusicFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String listName = editText.getText().toString();
-                        DBHelper dbHelper = new DBHelper(getContext());
-                        dbHelper.insertList(listName);
+                        if (!"".equals(listName)){
+                            DBHelper dbHelper = new DBHelper(getContext());
+                            List<SongListBean> songListBeans = dbHelper.insertList(listName);
+                            songListAdapter.setList(songListBeans);
+                            songListAdapter.notifyDataSetChanged();
+                        }
                     }
                 }).show();
     }
@@ -169,5 +177,14 @@ public class MyMusicFragment extends Fragment {
         }
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<SongListBean> songList = dbHelper.getSongList();
+
+        songListAdapter.setList(songList);
+        songListAdapter.notifyDataSetChanged();
     }
 }

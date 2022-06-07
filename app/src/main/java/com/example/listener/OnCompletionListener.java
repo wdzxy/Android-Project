@@ -20,6 +20,10 @@ public class OnCompletionListener implements MediaPlayer.OnCompletionListener {
         index = 0;
     }
 
+    public int getPlayType() {
+        return playType;
+    }
+
     public void setPlayType(int playType) {
         this.playType = playType;
     }

@@ -11,12 +11,12 @@ public class Song {
     public static final String COLUMN_LIST_ID = "list_id";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
-            + COLUMN_ID + " TEXT PRIMARY KEY,"
+            + COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_SONG_ID + " TEXT,"
             + COLUMN_LIST_ID + " INTEGER"
             + ")";
 
-    private int id;//歌曲在数据库中的id
+    private int id;//自增主键
 
     private String songId;
 

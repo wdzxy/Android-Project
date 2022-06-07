@@ -41,7 +41,26 @@ public class BtnListener implements View.OnClickListener {
                 player.play();
                 break;
             case BtnTypes.NEXT:
-                boolean bn = player.playNext();
+                int playType = player.getListener().getPlayType();
+                player.update();
+                switch (playType){
+                    case PlayTypes.ORDER:
+                        player.playNext();
+                        break;
+                    case PlayTypes.LOOP_ONE:
+                        player.replay();
+                        break;
+                    case PlayTypes.LOOP:
+                        boolean b = player.playNext();//返回false说明已经是播放完最后一首了，回到第一首
+                        if (!b){
+                            player.playFirst();
+                        }
+                        break;
+                    case PlayTypes.RANDOM:
+                        player.randomPlay();
+                        break;
+                }
+                //boolean bn = player.playNext();
                 break;
             case BtnTypes.LAST:
                 boolean bl = player.playLast();

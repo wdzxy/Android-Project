@@ -313,6 +313,9 @@ public class Player {
             mediaPlayer.setOnCompletionListener(listener);
             mediaPlayer.start();
             status = true;
+
+            DBHelper dbHelper = new DBHelper(context);
+            dbHelper.insertRecentPlay(currentSong.getID(),currentSong.getSong());
         }else{
             mediaPlayer.start();
         }
@@ -371,7 +374,11 @@ public class Player {
     }
 
     public int getCurrent(){
-        current = mediaPlayer.getCurrentPosition();
+        try {
+            current = mediaPlayer.getCurrentPosition();
+        } catch (IllegalStateException e) {
+            //doNothing
+        }
         return current;
     }
 

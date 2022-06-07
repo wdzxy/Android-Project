@@ -18,11 +18,14 @@ import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
 import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
+import com.example.musicplayer.adapter.ListSingleSongAdapter;
 import com.example.musicplayer.adapter.SingleSongAdapter;
 import com.example.musicplayer.player.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SongListActivity extends AppCompatActivity {
 
@@ -38,6 +41,8 @@ public class SongListActivity extends AppCompatActivity {
     private TextView songTV,singerTV;
 
     private Player player;
+
+    private ListSingleSongAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +70,9 @@ public class SongListActivity extends AppCompatActivity {
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         List<SingleSongBean> songListByListId = dbHelper.getSongListByListId(Integer.parseInt(listId));
 
-        SingleSongAdapter adapter = new SingleSongAdapter(songListByListId, getApplicationContext());
+        adapter = new ListSingleSongAdapter(songListByListId,this,Integer.parseInt(listId),songListCountTV);
 
-        adapter.setOnItemClickListener(new SingleSongAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new ListSingleSongAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 int currentPosistion = position;
@@ -105,6 +110,8 @@ public class SongListActivity extends AppCompatActivity {
         BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
         lastIV.setOnClickListener(lastBtnListener);
 
+        player.addView(songTV,singerTV,playIV);
+
         RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
         bottomPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,30 +128,42 @@ public class SongListActivity extends AppCompatActivity {
         addSongBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddSongDialog();
+                showAddSongDialog(listId);
             }
         });
 
     }
 
-    private void showAddSongDialog() {
-        final String[] items = { "我是1","我是2","我是3","我是4" };
-        ArrayList<Integer> yourChoices = new ArrayList<>();
+    private void showAddSongDialog(String songListId) {
+
+        //当前歌单已经包含的单曲，在展示添加列表时应该过滤这些已经包含的
+        List<SingleSongBean> contains = adapter.getList();
+        List<SingleSongBean> singleSongList = player.getSingleSongList();
+        List<String> collect = singleSongList
+                .stream()
+                .filter(bean -> {
+                    return !contains.contains(bean);
+                })
+                .map(SingleSongBean::getSong)
+                .collect(Collectors.toList());
+        final String[] items = collect.toArray(new String[collect.size()]);
+        //选中的单曲的ID
+        ArrayList<String> yourChoices = new ArrayList<>();
         // 设置默认选中的选项，全为false默认均未选中
-        final boolean initChoiceSets[]={false,false,false,false};
+        final boolean initChoiceSets[] = new boolean[collect.size()];
         yourChoices.clear();
-        AlertDialog.Builder multiChoiceDialog =
-                new AlertDialog.Builder(getApplicationContext());
-        multiChoiceDialog.setTitle("我是一个多选Dialog");
+        AlertDialog.Builder multiChoiceDialog = new AlertDialog.Builder(this);
+        multiChoiceDialog.setTitle("添加单曲");
         multiChoiceDialog.setMultiChoiceItems(items, initChoiceSets,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which,
                                         boolean isChecked) {
+                        SingleSongBean singleSongBean = singleSongList.get(which);
                         if (isChecked) {
-                            yourChoices.add(which);
+                            yourChoices.add(singleSongBean.getID());
                         } else {
-                            yourChoices.remove(which);
+                            yourChoices.remove(singleSongBean.getID());
                         }
                     }
                 });
@@ -152,12 +171,14 @@ public class SongListActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int size = yourChoices.size();
-                        String str = "";
-                        for (int i = 0; i < size; i++) {
-                            str += items[yourChoices.get(i)] + " ";
-                        }
-
+                        DBHelper dbHelper = new DBHelper(getApplicationContext());
+                        List<SingleSongBean> singleSongBeans = dbHelper.insertSong(
+                                yourChoices,
+                                Integer.parseInt(songListId)
+                        );
+                        songListCountTV.setText(singleSongBeans.size() + "首");
+                        adapter.setList(singleSongBeans);
+                        adapter.notifyDataSetChanged();
                     }
                 });
         multiChoiceDialog.show();

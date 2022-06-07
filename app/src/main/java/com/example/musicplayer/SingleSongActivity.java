@@ -69,7 +69,6 @@ public class SingleSongActivity extends AppCompatActivity {
         player = Player.getPlayer(getApplicationContext());
         //获取RecyclerView
         musicRV = (RecyclerView) findViewById(R.id.album_single_rv);
-        System.out.println(musicRV);
         //设置适配器
         adapter = new SingleSongAdapter(player.getListBySinger(singer), getApplicationContext());
         //设置监听事件
@@ -92,10 +91,6 @@ public class SingleSongActivity extends AppCompatActivity {
         //设置布局管理器，垂直，不反转
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         musicRV.setLayoutManager(linearLayoutManager);
-
-
-
-
 
         //底部播放器
         nextIV = (Button) findViewById(R.id.local_music_bottom_iv_next);

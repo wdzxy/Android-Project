@@ -30,10 +30,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "song_list_db";
 
-    private static final int DATABSE_VERSION = 1;
+    private static final int DATBASE_VERSION = 1;
 
     public DBHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, DATABSE_VERSION);
+        super(context, DATABASE_NAME, null, DATBASE_VERSION);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -55,7 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * 创建一个新的歌单
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public long insertList(String name){
+    public List<SongListBean> insertList(String name){
         String createTime = LocalDateTime.now().toString();
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -68,7 +68,36 @@ public class DBHelper extends SQLiteOpenHelper {
         long id = db.insert(SongList.TABLE_NAME, null, values);
         db.close();
 
-        return id;
+        List<SongListBean> songList = getSongList();
+
+        return songList;
+    }
+
+    /**
+     * 删除歌单
+     * @param id
+     * @return
+     */
+    public List<SongListBean> removeSongList(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //删除歌单前，先删除歌单中保存的单曲
+        db.delete(
+                Song.TABLE_NAME,
+                Song.COLUMN_LIST_ID + "=?",
+                new String[]{String.valueOf(id)}
+        );
+        //删除歌单
+        int delete = db.delete(
+                SongList.TABLE_NAME,
+                SongList.COLUMN_ID + "=?",
+                new String[]{String.valueOf(id)}
+        );
+        db.close();
+
+        List<SongListBean> songList = getSongList();
+
+        return songList;
     }
 
     /**
@@ -118,6 +147,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             songListBeans.add(songListBean);
         }
+        db.close();
         return songListBeans;
     }
 
@@ -147,24 +177,60 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Player player = Player.getPlayer(null);
         List<SingleSongBean> listBySongId = player.getListBySongId(songIDs);
+        db.close();
         return listBySongId;
     }
 
     /**
      * 将单曲保存到歌单中
-     * @param songID
+     * @param songIDs
      * @param songListID
      * @return
      */
-    public long insertSong(String songID,int songListID){
+    public List<SingleSongBean> insertSong(List<String> songIDs,int songListID){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(Song.COLUMN_ID,songID);
-        values.put(Song.COLUMN_LIST_ID,songListID);
+        String sql = "INSERT INTO " + Song.TABLE_NAME + " (" + Song.COLUMN_SONG_ID + "," + Song.COLUMN_LIST_ID + ") VALUES ";
+        for (int i = 0;i < songIDs.size();i++) {
+            String songId = songIDs.get(i);
+            if (i == 0){
+                sql += "(";
+            }else {
+                sql += ",(";
+            }
+            sql += songId + "," + songListID + ")";
+        }
+        System.out.println(sql);
 
-        long id = db.insert(Song.TABLE_NAME, null, values);
-        return id;
+        db.execSQL(sql);
+
+//        ContentValues values = new ContentValues();
+//        values.put(Song.COLUMN_ID,songID);
+//        values.put(Song.COLUMN_LIST_ID,songListID);
+//
+//        long id = db.insert(Song.TABLE_NAME, null, values);
+        db.close();
+
+        List<SingleSongBean> songListByListId = getSongListByListId(songListID);
+        return songListByListId;
+    }
+
+    /**
+     * 从歌单中删除单曲
+     * @param songId
+     * @param songListId
+     */
+    public List<SingleSongBean> removeSong(String songId,int songListId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(
+                Song.TABLE_NAME,
+                Song.COLUMN_SONG_ID + "=? AND " + Song.COLUMN_LIST_ID + "=?",
+                new String[]{songId,String.valueOf(songListId)}
+        );
+        List<SingleSongBean> songListByListId = getSongListByListId(songListId);
+        db.close();
+
+        return songListByListId;
     }
 
     /**
@@ -181,6 +247,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(Collection.COLUMN_SONG_NAME,songName);
 
         long id = db.insert(Collection.TABLE_NAME, null, values);
+        db.close();
         return id;
     }
 
@@ -193,6 +260,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         int id = db.delete(Collection.TABLE_NAME, Collection.COLUMN_ID + "=?", new String[]{songID});
+        db.close();
         return id;
     }
 
@@ -221,6 +289,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Player player = Player.getPlayer(null);
         List<SingleSongBean> listBySongId = player.getListBySongId(ids);
+        db.close();
         return listBySongId;
     }
 
@@ -263,6 +332,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 null,
                 values
         );
+        db.close();
         return insert;
     }
 
@@ -291,6 +361,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Player player = Player.getPlayer(null);
         List<SingleSongBean> listBySongId = player.getRecentPlayBySongId(ids);
+
+        db.close();
 
         return listBySongId;
     }
