@@ -41,7 +41,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     public AlbumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         //读取item的layout文件
-        View view = View.inflate(context, R.layout.recyclerview_main_song_sheet_item, null);
+        View view = View.inflate(context, R.layout.recyclerview_album, null);
         return new AlbumViewHolder(view);
     }
 
