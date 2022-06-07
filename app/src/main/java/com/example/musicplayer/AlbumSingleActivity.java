@@ -79,6 +79,10 @@ public class AlbumSingleActivity extends AppCompatActivity {
             DBHelper dbHelper = new DBHelper(getApplicationContext());
             adapter = new SingleSongAdapter(dbHelper.getCollections(),getApplicationContext());
             titleTV.setText("我的收藏");
+        }else if ("recentList".equals(listType)){
+            DBHelper dbHelper = new DBHelper(getApplicationContext());
+            adapter = new SingleSongAdapter(dbHelper.getRecentList(),getApplicationContext());
+            titleTV.setText("最近播放");
         }
         //设置监听事件
         adapter.setOnItemClickListener(new SingleSongAdapter.OnItemClickListener() {

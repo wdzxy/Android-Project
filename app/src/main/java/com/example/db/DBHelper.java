@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import com.example.bean.SingleSongBean;
 import com.example.bean.SongListBean;
 import com.example.db.model.Collection;
+import com.example.db.model.RecentList;
 import com.example.db.model.Song;
 import com.example.db.model.SongList;
 import com.example.musicplayer.player.Player;
@@ -22,6 +23,7 @@ import com.example.musicplayer.player.Player;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -41,6 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SongList.CREATE_TABLE);
         db.execSQL(Song.CREATE_TABLE);
         db.execSQL(Collection.CREATE_TABLE);
+        db.execSQL(RecentList.CREATE_TABLE);
     }
 
     @Override
@@ -218,10 +221,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Player player = Player.getPlayer(null);
         List<SingleSongBean> listBySongId = player.getListBySongId(ids);
-        System.out.println(listBySongId.size());
         return listBySongId;
     }
 
+    /**
+     * 判断单曲是否被收藏
+     * @param songId
+     * @return
+     */
     public boolean isCollected(String songId){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -236,5 +243,56 @@ public class DBHelper extends SQLiteOpenHelper {
         );
 
         return cursor.getCount() > 0;
+    }
+
+    /**
+     * 将单曲添加到最近播放
+     * @param songId
+     * @param songName
+     * @return
+     */
+    public long insertRecentPlay(String songId,String songName){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(RecentList.COLUMN_SONG_ID,songId);
+        values.put(RecentList.COLUMN_SONG_NAME,songName);
+
+        long insert = db.insert(
+                RecentList.TABLE_NAME,
+                null,
+                values
+        );
+        return insert;
+    }
+
+    /**
+     * 获取最近播放列表
+     * @return
+     */
+    public List<SingleSongBean> getRecentList(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                RecentList.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        ArrayList<String> ids = new ArrayList<>();
+        while (cursor != null && cursor.moveToNext()){
+            String songId = cursor.getString(cursor.getColumnIndex(RecentList.COLUMN_SONG_ID));
+            ids.add(songId);
+        }
+
+        Player player = Player.getPlayer(null);
+        List<SingleSongBean> listBySongId = player.getListBySongId(ids);
+
+        Collections.reverse(listBySongId);
+        return listBySongId;
     }
 }

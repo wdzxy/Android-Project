@@ -37,7 +37,7 @@ public class MyMusicFragment extends Fragment {
 
     private Player player;
 
-    private Button localMusic,myCollection;
+    private Button localMusic,myCollection,recentList;
 
     public MyMusicFragment() {
         // Required empty public constructor
@@ -97,6 +97,18 @@ public class MyMusicFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setClass(getActivity().getApplicationContext(), AlbumSingleActivity.class);
                 intent.putExtra("listType","collection");
+                intent.putExtra("arg","");
+                startActivity(intent);
+            }
+        });
+
+        recentList = root.findViewById(R.id.resent_music);
+        recentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getContext(),AlbumSingleActivity.class);
+                intent.putExtra("listType","recentList");
                 intent.putExtra("arg","");
                 startActivity(intent);
             }
