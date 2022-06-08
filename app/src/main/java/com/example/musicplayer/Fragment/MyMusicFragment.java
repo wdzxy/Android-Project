@@ -96,7 +96,7 @@ public class MyMusicFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent();
                 intent.setClass(getContext(), SongListActivity.class);
-                SongListBean songListBean = songList.get(position);
+                SongListBean songListBean = dbHelper.getSongList().get(position);
                 intent.putExtra("listId",String.valueOf(songListBean.getId()));
                 intent.putExtra("listName",songListBean.getName());
                 intent.putExtra("listCreateTime",songListBean.getCreateTime());

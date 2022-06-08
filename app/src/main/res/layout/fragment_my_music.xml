@@ -25,9 +25,9 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="0.25"
-                android:scaleType="fitStart"
-                android:layout_margin="5dp"
-                android:src="@drawable/local_music" />
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_account" />
 
             <TextView
                 android:id="@+id/login_status_text"
