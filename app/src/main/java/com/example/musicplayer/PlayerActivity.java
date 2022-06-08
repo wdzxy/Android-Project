@@ -26,6 +26,7 @@ import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
 import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
+import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 import com.gauravk.audiovisualizer.visualizer.BarVisualizer;
 
@@ -127,15 +128,26 @@ public class PlayerActivity extends AppCompatActivity {
         songNameTV.setText(songName);
         player.addSongTV(songNameTV);
 
+        Notification notification =  new Notification(this);
+
         BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
-        playBtn.setOnClickListener(playBtnListener);
+        playBtn.setOnClickListener(v -> {
+            playBtnListener.onClick(v);
+            notification.sendNotification();
+        });
         player.addPlayBtn(playBtn);
 
         BtnListener nextBtnListener = new BtnListener(player, BtnTypes.NEXT);
-        nextBtn.setOnClickListener(nextBtnListener);
+        nextBtn.setOnClickListener(v -> {
+            nextBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener prevBtnListener = new BtnListener(player, BtnTypes.LAST);
-        prevBtn.setOnClickListener(prevBtnListener);
+        prevBtn.setOnClickListener(v -> {
+            prevBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener forwardBtnListener = new BtnListener(player, BtnTypes.FORWARD);
         ffBtn.setOnClickListener(forwardBtnListener);

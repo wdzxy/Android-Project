@@ -1,13 +1,10 @@
 package com.example.listener;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.telephony.mbms.MbmsErrors;
 import android.view.View;
 
 import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
-import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.player.Player;
 

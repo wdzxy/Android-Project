@@ -20,6 +20,7 @@ import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
 import com.example.musicplayer.adapter.ListSingleSongAdapter;
 import com.example.musicplayer.adapter.SingleSongAdapter;
+import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 
 import java.util.ArrayList;
@@ -101,14 +102,25 @@ public class SongListActivity extends AppCompatActivity {
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
 
+        Notification notification = new Notification(this);
+
         BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
-        playIV.setOnClickListener(playBtnListener);
+        playIV.setOnClickListener(v -> {
+            playBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
-        nextIV.setOnClickListener(nextBtnListener);
+        nextIV.setOnClickListener(v -> {
+            nextBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
-        lastIV.setOnClickListener(lastBtnListener);
+        lastIV.setOnClickListener(v -> {
+            lastBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         player.addView(songTV,singerTV,playIV);
 

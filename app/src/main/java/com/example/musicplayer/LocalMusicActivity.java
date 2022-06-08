@@ -1,5 +1,9 @@
 package com.example.musicplayer;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,6 +15,7 @@ import com.example.musicplayer.Fragment.PathFragment;
 import com.example.musicplayer.Fragment.SingerFragment;
 import com.example.musicplayer.Fragment.SingleSongFragment;
 import com.example.musicplayer.adapter.PathAdapter;
+import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +24,8 @@ import com.xuexiang.xui.widget.tabbar.EasyIndicator;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -49,6 +56,7 @@ public class LocalMusicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_music);
+        Notification notification = new Notification(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -91,13 +99,22 @@ public class LocalMusicActivity extends AppCompatActivity {
         player.addView(songTV,singerTV,playIV);
 
         BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
-        playIV.setOnClickListener(playBtnListener);
+        playIV.setOnClickListener(v -> {
+            playBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
-        nextIV.setOnClickListener(nextBtnListener);
+        nextIV.setOnClickListener(v -> {
+            nextBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
-        lastIV.setOnClickListener(lastBtnListener);
+        lastIV.setOnClickListener(v -> {
+            lastBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
         bottomPlayer.setOnClickListener(new View.OnClickListener() {
@@ -129,4 +146,5 @@ public class LocalMusicActivity extends AppCompatActivity {
             return fragments == null ? 0 : fragments.size();
         }
     }
+
 }

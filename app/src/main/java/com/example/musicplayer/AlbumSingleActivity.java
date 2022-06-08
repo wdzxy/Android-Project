@@ -15,6 +15,7 @@ import com.example.musicplayer.Fragment.SingleSongFragment;
 import com.example.musicplayer.adapter.AlbumAdapter;
 import com.example.musicplayer.adapter.PathAdapter;
 import com.example.musicplayer.adapter.SingleSongAdapter;
+import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -133,14 +134,25 @@ public class AlbumSingleActivity extends AppCompatActivity {
         player = Player.getPlayer(this);
         player.addView(songTV,singerTV,playIV);
 
+        Notification notification = new Notification(this);
+
         BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
-        playIV.setOnClickListener(playBtnListener);
+        playIV.setOnClickListener(v -> {
+            playBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
-        nextIV.setOnClickListener(nextBtnListener);
+        nextIV.setOnClickListener(v -> {
+            nextBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
-        lastIV.setOnClickListener(lastBtnListener);
+        lastIV.setOnClickListener(v -> {
+            lastBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
         bottomPlayer.setOnClickListener(new View.OnClickListener() {

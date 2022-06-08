@@ -32,6 +32,7 @@ import com.example.listener.BtnListener;
 import com.example.listener.BtnTypes;
 import com.example.musicplayer.Fragment.MusicLibFragment;
 import com.example.musicplayer.Fragment.MyMusicFragment;
+import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
 import com.xuexiang.xui.widget.tabbar.EasyIndicator;
 
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Notification notification = new Notification(this);
         setContentView(R.layout.activity_main);
 
         //需要在程序中动态获取存储的读写权限，否则不部分系统中无法打开音乐文件
@@ -116,13 +118,22 @@ public class MainActivity extends AppCompatActivity {
         player.addView(songTV,singerTV,playIV);
 
         BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
-        playIV.setOnClickListener(playBtnListener);
+        playIV.setOnClickListener(v -> {
+            playBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener nextBtnListener = new BtnListener(player,BtnTypes.NEXT);
-        nextIV.setOnClickListener(nextBtnListener);
+        nextIV.setOnClickListener(v -> {
+            nextBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         BtnListener lastBtnListener = new BtnListener(player,BtnTypes.LAST);
-        lastIV.setOnClickListener(lastBtnListener);
+        lastIV.setOnClickListener(v -> {
+            lastBtnListener.onClick(v);
+            notification.sendNotification();
+        });
 
         RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
         bottomPlayer.setOnClickListener(new View.OnClickListener() {
@@ -136,15 +147,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        String NOTIFICATION_ACTION = "21";
-
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("PREV");
         intentFilter.addAction("PAUSE");
         intentFilter.addAction("NEXT");
         registerReceiver(broadcastReceiver,intentFilter);
 
-        sendNotification();
+        notification.sendNotification();
     }
 
     @Override
@@ -204,8 +213,6 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         Player player = Player.getPlayer(this);
-
-        SingleSongBean singleSongBean = player.getCurrentSong();
 
         singerTV = findViewById(R.id.local_music_bottom_tv_singer);
         songTV =  findViewById(R.id.local_music_bottom_tv_song);
