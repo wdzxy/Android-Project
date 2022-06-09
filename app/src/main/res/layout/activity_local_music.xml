@@ -81,7 +81,7 @@
                 android:layout_height="0.5dp"
                 android:background="@color/xui_btn_blue_select_color" />
 
-            <ImageView
+            <com.example.view.CircleImageView
                 android:id="@+id/local_music_bottom_iv_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"

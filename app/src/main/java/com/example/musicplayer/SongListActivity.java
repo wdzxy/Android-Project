@@ -24,6 +24,7 @@ import com.example.musicplayer.adapter.ListSingleSongAdapter;
 import com.example.musicplayer.adapter.SingleSongAdapter;
 import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
+import com.example.view.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +43,8 @@ public class SongListActivity extends AppCompatActivity {
     private Button nextIV,playIV,lastIV;
 
     private TextView songTV,singerTV;
+
+    private CircleImageView circleImageView;
 
     private Player player;
 
@@ -116,6 +119,8 @@ public class SongListActivity extends AppCompatActivity {
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
 
+        circleImageView = (CircleImageView) findViewById(R.id.local_music_bottom_iv_icon);
+
         Notification notification = new Notification(this);
 
         BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
@@ -136,7 +141,7 @@ public class SongListActivity extends AppCompatActivity {
             notification.sendNotification();
         });
 
-        player.addView(songTV,singerTV,playIV);
+        player.addView(songTV,singerTV,playIV,circleImageView);
 
         RelativeLayout bottomPlayer = findViewById(R.id.bottom_layout);
         bottomPlayer.setOnClickListener(new View.OnClickListener() {

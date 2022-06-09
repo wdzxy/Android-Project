@@ -29,6 +29,7 @@ import com.example.listener.BtnTypes;
 import com.example.listener.PlayTypes;
 import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
+import com.example.view.CircleImageView;
 import com.gauravk.audiovisualizer.visualizer.BarVisualizer;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private TextView songNameTV,startTV,stopTV;
 
-    private ImageView songImg;
+    private CircleImageView songImg;
 
     private SeekBar seekMusic;
 

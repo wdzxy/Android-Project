@@ -34,6 +34,7 @@ import com.example.musicplayer.Fragment.MusicLibFragment;
 import com.example.musicplayer.Fragment.MyMusicFragment;
 import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
+import com.example.view.CircleImageView;
 import com.xuexiang.xui.widget.tabbar.EasyIndicator;
 
 import java.util.ArrayList;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private Button nextIV,playIV,lastIV;
 
     private TextView songTV,singerTV;
+
+    private CircleImageView circleImageView;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -114,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
 
+        circleImageView = (CircleImageView) findViewById(R.id.local_music_bottom_iv_icon);
+
         player = Player.getPlayer(this);
-        player.addView(songTV,singerTV,playIV);
+        player.addView(songTV,singerTV,playIV,circleImageView);
 
         BtnListener playBtnListener = new BtnListener(player, BtnTypes.PLAY);
         playIV.setOnClickListener(v -> {

@@ -18,6 +18,8 @@ public class SingleSongBean {
 
     private String ID;//在数据库中的id
 
+    private String albumArt;//封面id
+
     public SingleSongBean() {
     }
 
@@ -29,6 +31,17 @@ public class SingleSongBean {
         this.path = path;
         this.album = album;
         this.ID = ID;
+    }
+
+    public SingleSongBean(String id, String song, String singer, String duration, String path, String album, String ID, String albumArt) {
+        this.id = id;
+        this.song = song;
+        this.singer = singer;
+        this.duration = duration;
+        this.path = path;
+        this.album = album;
+        this.ID = ID;
+        this.albumArt = albumArt;
     }
 
     public String getId() {
@@ -85,6 +98,14 @@ public class SingleSongBean {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public String getAlbumArt() {
+        return albumArt;
+    }
+
+    public void setImage(String albumArt) {
+        this.albumArt = albumArt;
     }
 
     @Override

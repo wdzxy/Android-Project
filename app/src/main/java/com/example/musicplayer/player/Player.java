@@ -18,6 +18,8 @@ import com.example.bean.SingleSongBean;
 import com.example.db.DBHelper;
 import com.example.listener.OnCompletionListener;
 import com.example.musicplayer.R;
+import com.example.util.ImageUtil;
+import com.example.view.CircleImageView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -69,6 +71,8 @@ public class Player {
 
     private List<Button> playIvList;
 
+    private List<CircleImageView> songImageList;
+
     private OnCompletionListener listener;
 
     private Player(Context context){
@@ -78,9 +82,10 @@ public class Player {
         albumMap = new HashMap<>();
         singerMap = new HashMap<>();
         pathMap = new HashMap<>();
-        songTvList = new ArrayList<>(3);//初始长度根据activity个数确定
-        singerTvList = new ArrayList<>(3);
-        playIvList = new ArrayList<>(3);
+        songTvList = new ArrayList<>(4);//初始长度根据activity个数确定
+        singerTvList = new ArrayList<>(4);
+        playIvList = new ArrayList<>(4);
+        songImageList = new ArrayList<>(4);
         listener = new OnCompletionListener(this);
         loadData();
     }
@@ -237,6 +242,7 @@ public class Player {
             String time = simpleDateFormat.format(new Date(duration));
             String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
             String ID = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+            int anInt = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
 
             //将一行数据封装到对象中
             SingleSongBean singleSongBean = new SingleSongBean(
@@ -369,14 +375,15 @@ public class Player {
     }
 
     public int getDuration(){
-        return mediaPlayer.getDuration();
+        if (mediaPlayer.isPlaying()) {
+            return mediaPlayer.getDuration();
+        }
+        return 0;
     }
 
     public int getCurrent(){
-        try {
+        if (mediaPlayer.isPlaying()){
             current = mediaPlayer.getCurrentPosition();
-        } catch (IllegalStateException e) {
-            //doNothing
         }
         return current;
     }
@@ -452,10 +459,11 @@ public class Player {
      * @param singerTV
      * @param playIV
      */
-    public void addView(TextView songTV,TextView singerTV,Button playIV){
+    public void addView(TextView songTV,TextView singerTV,Button playIV,CircleImageView circleImageView){
         songTvList.add(songTV);
         singerTvList.add(singerTV);
         playIvList.add(playIV);
+        songImageList.add(circleImageView);
         String song = "";
         String singer = "";
 
@@ -469,6 +477,10 @@ public class Player {
         }
         if (!singer.equals("")) {
             singerTV.setText(singer);
+        }
+
+        if (currentSong != null) {
+            circleImageView.setImageBitmap(new ImageUtil(context).getSongImage(currentSong));
         }
 
         playIV.setBackgroundResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);//需要将图标替换,true:播放中 false:未播放或暂停
@@ -508,6 +520,12 @@ public class Player {
         button.setBackgroundResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);
     }
 
+    public void addSongImage(CircleImageView circleImageView){
+        songImageList.add(circleImageView);
+
+        circleImageView.setImageBitmap(new ImageUtil(context).getSongImage(currentSong));
+    }
+
     public void removeView(TextView songTV,TextView singerTV,ImageView playIV){
         songTvList.remove(songTV);
         singerTvList.remove(singerTV);
@@ -522,8 +540,9 @@ public class Player {
         int songs = songTvList.size();
         int singers = singerTvList.size();
         int plays = playIvList.size();
+        int songImages = songImageList.size();
 
-        for (int i = 0; i < songs || i < singers || i < plays; i++) {
+        for (int i = 0; i < songs || i < singers || i < plays || i < songImages; i++) {
             if (i < songs){
                 songTvList.get(i).setText(currentSong.getSong());
             }
@@ -532,6 +551,9 @@ public class Player {
             }
             if (i < plays){
                 playIvList.get(i).setBackgroundResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);//需要将图标替换,true:播放中 false:未播放或暂停
+            }
+            if (i < songImages){
+                songImageList.get(i).setImageBitmap(new ImageUtil(context).getSongImage(currentSong));
             }
         }
     }

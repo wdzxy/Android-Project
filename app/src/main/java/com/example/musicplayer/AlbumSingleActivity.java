@@ -17,6 +17,7 @@ import com.example.musicplayer.adapter.PathAdapter;
 import com.example.musicplayer.adapter.SingleSongAdapter;
 import com.example.musicplayer.notification.Notification;
 import com.example.musicplayer.player.Player;
+import com.example.view.CircleImageView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.xuexiang.xui.widget.tabbar.EasyIndicator;
@@ -54,6 +55,8 @@ public class AlbumSingleActivity extends AppCompatActivity {
     private Button nextIV,playIV,lastIV;
 
     private TextView songTV,singerTV,titleTV;
+
+    private CircleImageView circleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +137,10 @@ public class AlbumSingleActivity extends AppCompatActivity {
         singerTV = (TextView) findViewById(R.id.local_music_bottom_tv_singer);
         songTV = (TextView) findViewById(R.id.local_music_bottom_tv_song);
 
+        circleImageView = (CircleImageView) findViewById(R.id.local_music_bottom_iv_icon);
+
         player = Player.getPlayer(this);
-        player.addView(songTV,singerTV,playIV);
+        player.addView(songTV,singerTV,playIV,circleImageView);
 
         Notification notification = new Notification(this);
 

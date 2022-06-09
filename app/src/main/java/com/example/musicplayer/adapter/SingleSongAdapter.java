@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bean.SingleSongBean;
 import com.example.musicplayer.R;
+import com.example.util.ImageUtil;
 
 import java.util.List;
 
@@ -58,6 +60,7 @@ public class SingleSongAdapter extends RecyclerView.Adapter<SingleSongAdapter.Si
         holder.songTV.setText(singleSongBean.getSong());
         holder.singerTV.setText(singleSongBean.getSinger());
         holder.timeTV.setText(singleSongBean.getDuration());
+        holder.imageView.setImageBitmap(new ImageUtil(context).getSongImage(singleSongBean));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,12 +79,15 @@ public class SingleSongAdapter extends RecyclerView.Adapter<SingleSongAdapter.Si
 
         public TextView idTV,songTV,singerTV,timeTV;
 
+        public ImageView imageView;
+
         public SingleSongViewHolder(@NonNull View itemView) {
             super(itemView);
             idTV = itemView.findViewById(R.id.item_local_music_num);
             songTV = itemView.findViewById(R.id.item_local_music_song);
             singerTV = itemView.findViewById(R.id.item_local_music_singer);
             timeTV = itemView.findViewById(R.id.item_local_music_duration);
+            imageView = itemView.findViewById(R.id.song_img);
         }
     }
 }

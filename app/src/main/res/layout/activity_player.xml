@@ -67,7 +67,7 @@
             android:textAlignment="center"
             android:textStyle="italic"/>
 
-        <ImageView
+        <com.example.view.CircleImageView
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:id="@+id/song_img"

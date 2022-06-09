@@ -68,11 +68,13 @@ public class Notification {
                 //style
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(1 /* #1: pause button */))
-                //标题和文字
-                .setContentTitle(singerTV.getText().toString())
                 .setContentText(songTV.getText().toString())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
+        if (singerTV != null){
+            //标题和文字
+            builder.setContentTitle(singerTV.getText().toString());
+        }
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(1,builder.build());
     }
