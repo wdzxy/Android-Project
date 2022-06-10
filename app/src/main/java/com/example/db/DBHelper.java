@@ -188,28 +188,25 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return
      */
     public List<SingleSongBean> insertSong(List<String> songIDs,int songListID){
-        SQLiteDatabase db = this.getWritableDatabase();
+        if (songIDs.size() > 0) {
+            SQLiteDatabase db = this.getWritableDatabase();
 
-        String sql = "INSERT INTO " + Song.TABLE_NAME + " (" + Song.COLUMN_SONG_ID + "," + Song.COLUMN_LIST_ID + ") VALUES ";
-        for (int i = 0;i < songIDs.size();i++) {
-            String songId = songIDs.get(i);
-            if (i == 0){
-                sql += "(";
-            }else {
-                sql += ",(";
+            String sql = "INSERT INTO " + Song.TABLE_NAME + " (" + Song.COLUMN_SONG_ID + "," + Song.COLUMN_LIST_ID + ") VALUES ";
+            for (int i = 0;i < songIDs.size();i++) {
+                String songId = songIDs.get(i);
+                if (i == 0){
+                    sql += "(";
+                }else {
+                    sql += ",(";
+                }
+                sql += songId + "," + songListID + ")";
             }
-            sql += songId + "," + songListID + ")";
+            System.out.println(sql);
+
+            db.execSQL(sql);
+
+            db.close();
         }
-        System.out.println(sql);
-
-        db.execSQL(sql);
-
-//        ContentValues values = new ContentValues();
-//        values.put(Song.COLUMN_ID,songID);
-//        values.put(Song.COLUMN_LIST_ID,songListID);
-//
-//        long id = db.insert(Song.TABLE_NAME, null, values);
-        db.close();
 
         List<SingleSongBean> songListByListId = getSongListByListId(songListID);
         return songListByListId;

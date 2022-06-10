@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.musicplayer.MainActivity;
+import com.example.musicplayer.PlayerActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.player.Player;
 
@@ -57,6 +58,11 @@ public class Notification {
 
         TextView singerTV = ((Activity)context).findViewById(R.id.local_music_bottom_tv_singer);
         TextView songTV =  ((Activity)context).findViewById(R.id.local_music_bottom_tv_song);
+
+        if (context.getClass() == PlayerActivity.class){
+            singerTV = ((Activity)context).findViewById(R.id.song_name);
+            songTV = ((Activity)context).findViewById(R.id.song_name);
+        }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, id)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

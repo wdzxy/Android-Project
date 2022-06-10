@@ -46,7 +46,6 @@
             android:layout_height="60dp"
             android:src="@drawable/local_music"
             android:layout_centerVertical="true"
-            android:background="@color/white"
             android:layout_marginLeft="10dp"
             android:id="@+id/local_music_bottom_iv_icon"/>
 

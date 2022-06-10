@@ -102,6 +102,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         player = Player.getPlayer(this);
         dbHelper = new DBHelper(getApplicationContext());
+        player.addSongImage(songImg);
 
         SingleSongBean currentSong = player.getCurrentSong();
         boolean collected = dbHelper.isCollected(currentSong.getID());

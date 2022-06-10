@@ -375,15 +375,20 @@ public class Player {
     }
 
     public int getDuration(){
-        if (mediaPlayer.isPlaying()) {
-            return mediaPlayer.getDuration();
+        int duration = 100000;
+        try {
+            duration = mediaPlayer.getDuration();
+        } catch (Exception e) {
+            return 100000;
         }
-        return 0;
+        return duration;
     }
 
     public int getCurrent(){
-        if (mediaPlayer.isPlaying()){
+        try {
             current = mediaPlayer.getCurrentPosition();
+        } catch (IllegalStateException e) {
+            return current;
         }
         return current;
     }

@@ -87,7 +87,6 @@
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:background="@color/white"
                 android:src="@drawable/local_music" />
 
             <TextView
