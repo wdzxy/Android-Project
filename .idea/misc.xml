@@ -3,6 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_account.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_add.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_collect.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_delete.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_download.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_fast_forward.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_fast_rewind.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_launcher_background.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_list.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_list_order.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_loop.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_loop_one.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_next.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_pause.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_play.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_playlist_add.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_prev.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_random.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_song_list.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_splash.xml" value="0.133" />
+        <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/drawable/ic_un_clollected.xml" value="0.133" />
         <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/layout/activity_local_music.xml" value="0.19610507246376813" />
         <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/layout/activity_main.xml" value="0.13069908814589665" />
         <entry key="..\:/AndroidStudioProjects/AndroidPro/app/src/main/res/layout/activity_single_song.xml" value="0.13069908814589665" />

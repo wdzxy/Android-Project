@@ -1,8 +1,6 @@
 package com.example.musicplayer.notification;
 
 import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -23,13 +21,8 @@ public class Notification {
     }
 
     public void sendNotification(){
-        final String id ="channel_1";//⾃定义设置ID通道描述属性
+        final String id ="channel_20";//⾃定义设置ID通道描述属性
         final String description ="123";//通知栏管理重要提⽰消息声⾳设定
-        final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-        NotificationChannel mChannel =new NotificationChannel(id,"123", importance);
-        manager.createNotificationChannel(mChannel);
 
         //前一首
         Intent prevIntent = new Intent();
@@ -60,7 +53,7 @@ public class Notification {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, id)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setSmallIcon(R.drawable.ic_collect)
+                .setSmallIcon(R.drawable.ic_splash)
                 //按钮
                 .addAction(R.drawable.ic_prev,"Previous",prevPendingIntent)
                 .addAction(player.isPlaying()?R.drawable.ic_pause:R.drawable.ic_play,"PAUSE",pausePendingIntent)
@@ -72,7 +65,9 @@ public class Notification {
                 .setContentTitle(singerTV.getText().toString())
                 .setContentText(songTV.getText().toString())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setSound(null)
                 .setContentIntent(pendingIntent);
+        builder.setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(1,builder.build());
     }
