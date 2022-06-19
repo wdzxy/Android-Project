@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.musicplayer.MainActivity;
+import com.example.musicplayer.PlayerActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.player.Player;
 
@@ -51,6 +52,16 @@ public class Notification {
         TextView singerTV = ((Activity)context).findViewById(R.id.local_music_bottom_tv_singer);
         TextView songTV =  ((Activity)context).findViewById(R.id.local_music_bottom_tv_song);
 
+        String song = "";
+        String singer = "";
+        if (songTV == null || singerTV == null){
+            song = player.getCurrentSong().getSong();
+            singer = player.getCurrentSong().getSinger();
+        }else {
+            song = songTV.getText().toString();
+            singer = singerTV.getText().toString();
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, id)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.ic_splash)
@@ -62,8 +73,8 @@ public class Notification {
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(1 /* #1: pause button */))
                 //标题和文字
-                .setContentTitle(singerTV.getText().toString())
-                .setContentText(songTV.getText().toString())
+                .setContentTitle(singer)
+                .setContentText(song)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setSound(null)
                 .setContentIntent(pendingIntent);
